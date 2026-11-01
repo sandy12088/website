@@ -22,21 +22,22 @@ export function contentRoot(): string {
 }
 
 /**
- * Entry files: `index.mdx` is the English body, `index.cn.mdx` the Chinese one.
+ * Entry files: a default `index.md(x)` plus optional `index.en.md(x)` and
+ * `index.zh.md(x)` overlays. Both Markdown and MDX are supported.
  *
  * The locale suffix is not decoration: the collection's own glob decides which
  * files the loaders ever see (`import.meta.glob` in the generated `.source/`),
  * and the i18n `dot` parser only *then* splits them into a per-language storage.
- * A pattern that misses `index.cn.mdx` silently publishes no Chinese content, so
+ * A pattern that misses `index.zh.md` silently publishes no Chinese content, so
  * the patterns are exported for `packages/site-kit/src/__tests__` to guard.
  */
 export const COLLECTION_GLOBS = {
-  authors: ['*/index.mdx', '*/index.cn.mdx'],
-  events: ['*/index.mdx', '*/index.cn.mdx'],
-  fundings: ['*/index.mdx', '*/index.cn.mdx'],
+  authors: ['*/index{,.en,.zh}.{md,mdx}'],
+  events: ['*/index{,.en,.zh}.{md,mdx}'],
+  fundings: ['*/index{,.en,.zh}.{md,mdx}'],
   /** Patents live one level deeper (`pat/<slug>/index.mdx`), hence the recursion. */
-  pages: ['**/index.mdx', '**/index.cn.mdx'],
-  publications: ['**/index.mdx', '**/index.cn.mdx'],
+  pages: ['**/index{,.en,.zh}.{md,mdx}'],
+  publications: ['**/index{,.en,.zh}.{md,mdx}'],
 } as const
 
 export type CollectionFamily = keyof typeof COLLECTION_GLOBS

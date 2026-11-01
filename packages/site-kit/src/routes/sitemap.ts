@@ -61,7 +61,7 @@ export function sitemapHandler(
   /** The static build calls this once, so the document is built in one pass. */
   return () => {
     const alternateLanguage =
-      site.alternate.locale === 'cn' ? 'zh-Hans' : site.alternate.locale
+      site.alternate.locale === 'zh' ? 'zh-Hans' : site.alternate.locale
     const urls = entries(source)
       .map(entry => {
         const path = normalize(entry.loc)
@@ -72,7 +72,7 @@ export function sitemapHandler(
             : ''
         const alternates = source.hasTranslation(entry.loc)
           ? [
-              `<xhtml:link rel="alternate" hreflang="${site.locale === 'cn' ? 'zh-Hans' : 'en'}" href="${escapeXml(absoluteUrl(site.baseUrl, path))}"/>`,
+              `<xhtml:link rel="alternate" hreflang="${site.locale === 'zh' ? 'zh-Hans' : 'en'}" href="${escapeXml(absoluteUrl(site.baseUrl, path))}"/>`,
               `<xhtml:link rel="alternate" hreflang="${alternateLanguage}" href="${escapeXml(alternateUrl(site.alternate.baseUrl, path))}"/>`,
             ].join('')
           : ''

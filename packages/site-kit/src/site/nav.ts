@@ -24,5 +24,5 @@ const CN: readonly NavItem[] = [
 ]
 
 export function navFor(locale: Locale): readonly NavItem[] {
-  return locale === 'cn' ? CN : EN
+  return locale === 'zh' ? CN : EN
 }

@@ -34,46 +34,46 @@ import {
  * entries above it have not.
  */
 export const sitePages = [
-  { component: LandingPage, locales: ['cn', 'en'], path: '/' },
-  { component: NotFound, locales: ['cn', 'en'], path: '/404' },
+  { component: LandingPage, locales: ['zh', 'en'], path: '/' },
+  { component: NotFound, locales: ['zh', 'en'], path: '/404' },
 
-  { component: PeopleList, locales: ['cn', 'en'], path: '/people' },
+  { component: PeopleList, locales: ['zh', 'en'], path: '/people' },
   {
     component: PeopleDetail,
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/people/[...slugs]',
     staticParams: ({ source }) => source.authorParams(),
   },
 
-  { component: PublicationsList, locales: ['cn', 'en'], path: '/publications' },
-  { component: PublicationsList, locales: ['cn', 'en'], path: '/publication' },
+  { component: PublicationsList, locales: ['zh', 'en'], path: '/publications' },
+  { component: PublicationsList, locales: ['zh', 'en'], path: '/publication' },
   {
     component: PublicationsDetail,
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/publication/[...slugs]',
     staticParams: ({ source }) => source.publicationParams(),
   },
 
-  { component: FundingsList, locales: ['cn', 'en'], path: '/fundings' },
-  { component: FundingsList, locales: ['cn', 'en'], path: '/funding' },
+  { component: FundingsList, locales: ['zh', 'en'], path: '/fundings' },
+  { component: FundingsList, locales: ['zh', 'en'], path: '/funding' },
   {
     component: FundingsDetail,
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/funding/[...slugs]',
     staticParams: ({ source }) => source.fundingParams(),
   },
 
-  { component: EventsList, locales: ['cn', 'en'], path: '/event' },
+  { component: EventsList, locales: ['zh', 'en'], path: '/event' },
   {
     component: EventsDetail,
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/event/[...slugs]',
     staticParams: ({ source }) => source.eventParams(),
   },
 
   {
     component: StandalonePage,
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/[...slugs]',
     /**
      * `/privacy/`, `/terms/` and any other entry of the `pages` collection,
@@ -94,17 +94,17 @@ export const sitePages = [
 export const siteApis = [
   {
     handler: ({ site, source }) => feedHandler(site, source),
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/index.xml',
   },
   {
     handler: ({ site }) => robotsHandler(site),
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/robots.txt',
   },
   {
     handler: ({ site, source }) => sitemapHandler(site, source),
-    locales: ['cn', 'en'],
+    locales: ['zh', 'en'],
     path: '/sitemap.xml',
   },
 ] as const satisfies readonly SiteApi[]

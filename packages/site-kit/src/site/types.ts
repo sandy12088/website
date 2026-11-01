@@ -8,8 +8,8 @@
  * links to and what `hreflang` alternates in the sitemap point at.
  */
 
-/** A site's language. `en` is the unsuffixed/default content language. */
-export type Locale = 'cn' | 'en'
+/** A site's language; unsuffixed content is a neutral fallback for either. */
+export type Locale = 'en' | 'zh'
 
 export interface NavItem {
   label: string

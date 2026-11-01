@@ -5,7 +5,7 @@
 | 站点   | 目录                     | 语言 | Origin                 |
 | ------ | ------------------------ | ---- | ---------------------- |
 | 英文站 | `sites/yhma-yyds-group/` | `en` | https://yhmayyds.group |
-| 中文站 | `sites/magroup-ac-cn/`   | `cn` | https://magroup.ac.cn  |
+| 中文站 | `sites/magroup-ac-cn/`   | `zh` | https://magroup.ac.cn  |
 
 ## Stack
 
@@ -50,8 +50,10 @@ Read [development guide](./docs-dev/README.md) for more information.
   source of truth; `packages/site-kit/src/content/collections.ts` registers the
   collections and `pnpm test` validates the front matter against the same schemas.
 - **One content tree, two languages.** `content/` belongs to the repository, not to a
-  site: an entry is `index.mdx` (English) plus an optional `index.cn.mdx` (Chinese), and
-  the collection globs must match both names or a translation is never imported.
+  site: `index.md(x)` is the default, with optional `index.en.md(x)` / `index.zh.md(x)`
+  overlays. Front matter merges recursively before schema defaults; arrays replace.
+  Missing localized fields/body inherit the default, never the other language.
+  The collection globs must match all names or an overlay is never imported.
 - **Styling is StyleX only.** No Tailwind, no handwritten CSS except
   `packages/site-kit/src/styles/global.css` (the self-hosted font faces, the document
   palette, `color-scheme`, the nav current-page marker and the KaTeX overflow guard) and

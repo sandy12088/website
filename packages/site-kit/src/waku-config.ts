@@ -14,6 +14,8 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import { defineConfig } from 'waku/config'
 
+import { contentAssets } from './content-assets.ts'
+import { contentOverlays } from './content-overlays.ts'
 import { navigationBootstrap, themeBootstrap } from './shell/bootstrap.ts'
 
 /**
@@ -140,14 +142,15 @@ export function createWakuConfig(): Config {
         stylex.vite(stylexOptions) as PluginOption,
         // The macro API is enabled so `defineDocs`/`defineCollections` calls in
         // `source.config.ts` are statically evaluated instead of run at runtime.
+        contentOverlays(path.join(repoRoot(), 'content')),
         fumadocsMdx({ globalOptions: { mdxOptions } }),
         babelPlugin({ presets: [reactCompilerPreset()] }),
         react(),
         sharedContentWatcher(),
+        contentAssets(path.join(repoRoot(), 'content')),
         documentShell(),
       ],
-      // The assets are shared by both sites; Vite copies this directory into
-      // `dist/public` for each build.
+      // Only site-wide assets live here; bundle resources come from content/.
       publicDir: path.join(repoRoot(), 'public'),
       resolve: { dedupe: ['waku'], tsconfigPaths: true },
       server: {

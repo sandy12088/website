@@ -11,7 +11,7 @@ export const site = {
   alternate: {
     baseUrl: 'https://magroup.ac.cn',
     label: '中文',
-    locale: 'cn',
+    locale: 'zh',
   },
   /** `baseURL` from `config/_default/hugo.yaml`. */
   baseUrl: 'https://yhmayyds.group',

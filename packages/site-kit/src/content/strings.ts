@@ -29,6 +29,8 @@ export interface UiStrings {
   backToTop: string
   /** Heading for the talks archive, which has no authored page front matter. */
   events: string
+  /** Group identifiers stay stable in content; only their headings are translated. */
+  peopleGroups: Record<string, string>
   /** Accessible label and legend for the hero's thermodynamic diagram. */
   heroDiagram: {
     finiteTime: string
@@ -88,6 +90,7 @@ const EN: UiStrings = {
   abstract: 'Abstract',
   awards: 'Awards',
   events: 'Talks & events',
+  peopleGroups: {},
   heroDiagram: {
     finiteTime: 'Finite-time cycle',
     ideal: 'Ideal Carnot cycle',
@@ -133,6 +136,17 @@ const CN: UiStrings = {
   abstract: '摘要',
   awards: '荣誉和奖励',
   events: '讲座与活动',
+  peopleGroups: {
+    'Principal Investigator': '研究组负责人',
+    'Faculty Members': '教师',
+    'Postdoctoral Scholars': '博士后',
+    'Graduate Students': '研究生',
+    Students: '学生',
+    'Research Assistants': '研究助理',
+    Collaborators: '合作成员',
+    'Visiting Scholars': '访问学者',
+    Alumni: '往届成员',
+  },
   heroDiagram: {
     finiteTime: '有限时间循环',
     ideal: '理想卡诺循环',
@@ -163,7 +177,7 @@ const CN: UiStrings = {
   summary: '简介',
 }
 
-const BY_LOCALE: Record<Locale, UiStrings> = { cn: CN, en: EN }
+const BY_LOCALE: Record<Locale, UiStrings> = { en: EN, zh: CN }
 
 export function translate(locale: Locale): UiStrings {
   return BY_LOCALE[locale]

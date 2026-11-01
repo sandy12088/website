@@ -71,7 +71,6 @@ const publicationSchema = pageSchema.extend({
   ...mediaFields,
 
   abstract: z.string().default(''),
-  abstract_zh: z.string().optional(),
   author_notes: z.array(z.string()).default([]),
   authors: z.array(z.string()).default([]),
   date: z.string(),
@@ -87,7 +86,6 @@ const publicationSchema = pageSchema.extend({
   subtitle: z.string().default(''),
   summary: z.string().default(''),
   tags: z.array(z.string()).default([]),
-  title_zh: z.string().optional(),
   links: z.array(linkSchema).default([]),
 })
 
@@ -101,7 +99,6 @@ const fundingSchema = pageSchema.extend({
   slides: z.string().default(''),
   summary: z.string().default(''),
   tags: z.array(z.string()).default([]),
-  title_zh: z.string().optional(),
 })
 
 const eventSchema = pageSchema.extend({

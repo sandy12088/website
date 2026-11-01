@@ -23,7 +23,7 @@ export const site = {
     name: 'CC BY-NC-SA 4.0',
     url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
   },
-  locale: 'cn',
+  locale: 'zh',
   orgName: '马宇翰研究组',
   repository: {
     branch: 'main',

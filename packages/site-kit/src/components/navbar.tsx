@@ -65,8 +65,8 @@ export function Navbar() {
               <a
                 data-alt-site={alternate.baseUrl}
                 href={alternateUrl(alternate.baseUrl, '/')}
-                hrefLang={alternate.locale === 'cn' ? 'zh-Hans' : 'en'}
-                lang={alternate.locale === 'cn' ? 'zh-Hans' : 'en'}
+                hrefLang={alternate.locale === 'zh' ? 'zh-Hans' : 'en'}
+                lang={alternate.locale === 'zh' ? 'zh-Hans' : 'en'}
                 {...stylex.props(
                   styles.langSwitch,
                   controlStyles.nativeFocusVisible,

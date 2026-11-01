@@ -1,8 +1,8 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { parse } from 'yaml'
+import { readContentEntry } from '../content-overlays.ts'
 
 /**
  * Walk up from this file until the repository root.
@@ -37,29 +37,22 @@ export interface FrontMatterFile {
   family: string
   /** Directory name, which is the route slug. */
   slug: string
-  locale: 'cn' | 'en'
+  locale: 'default' | 'en' | 'zh'
   data: Record<string, unknown>
+  body: string
 }
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) walk(full, out)
-    else if (entry.name.endsWith('.mdx')) out.push(full)
+    else if (/\.mdx?$/.test(entry.name)) out.push(full)
   }
   return out
 }
 
-function readFrontMatter(file: string): Record<string, unknown> {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(readFileSync(file, 'utf8'))
-  const block = match?.[1]
-  if (block === undefined) throw new Error(`${file}: missing front matter`)
-  return (parse(block) ?? {}) as Record<string, unknown>
-}
-
 /**
- * Every collection entry (`index.mdx` / `index.cn.mdx`), which is the set of
- * files that must satisfy a collection schema.
+ * Every collection entry, with the same raw merge used before build validation.
  */
 export function collectionEntries(family?: string): FrontMatterFile[] {
   const families = family
@@ -74,12 +67,15 @@ export function collectionEntries(family?: string): FrontMatterFile[] {
     if (!existsSync(base)) continue
     for (const file of walk(base)) {
       const basename = path.basename(file)
-      if (basename !== 'index.mdx' && basename !== 'index.cn.mdx') continue
+      const match = /^index(?:\.(en|zh))?\.mdx?$/.exec(basename)
+      if (!match) continue
+      const entry = readContentEntry(file)
       out.push({
-        data: readFrontMatter(file),
+        data: entry.data,
+        body: entry.body,
         family: name,
         file: path.relative(ROOT, file),
-        locale: basename === 'index.cn.mdx' ? 'cn' : 'en',
+        locale: match[1] === 'zh' ? 'zh' : match[1] === 'en' ? 'en' : 'default',
         slug: path.basename(path.dirname(file)),
       })
     }

@@ -25,7 +25,7 @@ afterEach(() => {
   localStorage.removeItem('theme')
 })
 
-test.each(['en', 'cn'] as const)(
+test.each(['en', 'zh'] as const)(
   'toggles with localized names (%s), keyboard and storage',
   async locale => {
     const labels = translate(locale).appearance
@@ -79,7 +79,7 @@ test('still changes the in-memory theme when storage writes fail', async () => {
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
     throw new DOMException('Storage unavailable', 'SecurityError')
   })
-  const labels = translate('cn').appearance
+  const labels = translate('zh').appearance
   const screen = await render(<ThemeToggle labels={labels} />)
   await screen.getByRole('button', { name: labels.toDark }).click()
   await expect

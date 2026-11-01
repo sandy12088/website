@@ -1,4 +1,9 @@
-import type { Page, PageData } from 'fumadocs-core/source'
+import type {
+  MetaData,
+  Page,
+  PageData,
+  StaticSource,
+} from 'fumadocs-core/source'
 import type {
   DocCollectionEntry,
   DocsCollectionEntry,
@@ -30,8 +35,8 @@ import {
  * generated collections (`<app>/.source/server.ts`, produced by fumadocs-mdx
  * from the shared content tree) and its site identity, and gets back a single
  * object whose accessors are already bound to that site's language. Everything
- * else — the loaders, URL shapes, the translation fallback, the Chinese
- * front-matter overlay — stays behind this interface.
+ * else — the loaders, URL shapes and default-content fallback — stays behind
+ * this interface.
  */
 
 export type AuthorData = z.infer<typeof schemas.authors>
@@ -111,20 +116,15 @@ export interface ContentSource {
    */
   pageParams(): string[][]
   publicationParams(): string[][]
-  /** Whether the `cn` storage holds a real `index.cn.mdx` for this URL. */
+  /** Whether an authored `index.zh.md(x)` exists for this URL. */
   hasTranslation(url: string): boolean
 }
-
-/** The locale that holds the translations; the `en` storage is the source language. */
-const TRANSLATION_LOCALE = 'cn' as const
 
 /**
  * Route parameters for a Waku catch-all page inside one language.
  *
  * `generateParams()` lists every language in the loader's i18n config, so the
- * site's own language is filtered out here; on the Chinese site the inherited
- * English entries are already part of the `cn` storage, which is what keeps the
- * two sites' route sets identical.
+ * site's own language is filtered out here.
  */
 function paramsFor(
   source: { generateParams: () => { lang: string; slug: string[] }[] },
@@ -136,39 +136,47 @@ function paramsFor(
     .map(entry => entry.slug)
 }
 
-function text(value: unknown): string | undefined {
-  return typeof value === 'string' && value.length > 0 ? value : undefined
-}
-
 /**
- * Prefer the authored Chinese fields when a page has no translated body.
- *
- * Entries that already have `index.cn.mdx` bring their own title and abstract;
- * for the rest the front matter carries translations (`title_zh`,
- * `abstract_zh`) that the Chinese site can render instead of the English text.
+ * The compiler has already merged explicit overlays. Materialize each missing
+ * locale from the neutral default, never from another locale's override.
  */
-function withChineseFields<Data extends PageData>(
-  page: Page<string | undefined, Data>,
-): Page<string | undefined, Data> {
-  const data = page.data as Data & {
-    abstract?: string
-    abstract_zh?: unknown
-    title?: string
-    title_zh?: unknown
+function withDefaultContent<
+  Data extends PageData & DocData,
+  Meta extends MetaData,
+>(
+  source: StaticSource<{ pageData: Data; metaData: Meta }>,
+): StaticSource<{ pageData: Data; metaData: Meta }> {
+  const entries = new Map<string, (typeof source.files)[number]>()
+  for (const file of source.files) {
+    const key = file.path.replace(/\.mdx$/, '.md')
+    if (entries.has(key))
+      throw new Error(`Duplicate content entry: ${file.path}`)
+    entries.set(key, file)
   }
-  const title = text(data.title_zh)
-  const abstract = text(data.abstract_zh)
-  if (title === undefined && abstract === undefined) return page
-
-  // The overlay only replaces two already-optional string fields, so the result
-  // still satisfies the schema's data type.
-  const overlaid = {
-    ...data,
-    ...(title === undefined ? {} : { title }),
-    ...(abstract === undefined ? {} : { abstract }),
-  } as Data
-
-  return { ...page, data: overlaid }
+  for (const file of source.files) {
+    if (file.type !== 'page' || /\.(en|zh)\.mdx?$/.test(file.path)) continue
+    entries.delete(file.path.replace(/\.mdx$/, '.md'))
+    for (const locale of ['en', 'zh']) {
+      const localized = file.path.replace(/\.mdx?$/, `.${locale}.md`)
+      const overlay = entries.get(localized)
+      if (overlay === undefined)
+        entries.set(localized, { ...file, path: localized })
+      else if (
+        overlay.type === 'page' &&
+        overlay.data._exports['_inheritsDefaultBody'] === true
+      )
+        entries.set(localized, {
+          ...overlay,
+          data: {
+            ...overlay.data,
+            body: file.data.body,
+            toc: file.data.toc,
+            structuredData: file.data.structuredData,
+          },
+        })
+    }
+  }
+  return { ...source, files: [...entries.values()] }
 }
 
 export function createSource(
@@ -176,12 +184,12 @@ export function createSource(
   site: Pick<SiteConfig, 'locale'>,
 ): ContentSource {
   const locale = site.locale
-  const i18n = createSiteI18n(locale)
+  const i18n = createSiteI18n()
 
   const authors = loader({
     baseUrl: '/people',
     i18n,
-    source: toFumadocsSource(input.authorDocs, []),
+    source: withDefaultContent(toFumadocsSource(input.authorDocs, [])),
   })
   /**
    * `baseUrl` matches the URL the previous site published, not the collection
@@ -191,25 +199,24 @@ export function createSource(
   const publications = loader({
     baseUrl: '/publication',
     i18n,
-    source: toFumadocsSource(input.publicationDocs, []),
+    source: withDefaultContent(toFumadocsSource(input.publicationDocs, [])),
   })
   const fundings = loader({
     baseUrl: '/funding',
     i18n,
-    source: toFumadocsSource(input.fundingDocs, []),
+    source: withDefaultContent(toFumadocsSource(input.fundingDocs, [])),
   })
   const events = loader({
     baseUrl: '/event',
     i18n,
-    source: toFumadocsSource(input.eventDocs, []),
+    source: withDefaultContent(toFumadocsSource(input.eventDocs, [])),
   })
   const pages = loader({
     baseUrl: '',
     i18n,
-    source: input.pageDocs.toFumadocsSource(),
+    source: withDefaultContent(input.pageDocs.toFumadocsSource()),
   })
 
-  const chinese = locale === TRANSLATION_LOCALE
   /**
    * `content/authors/misc/` is a placeholder with no `title`; the previous site
    * never published a page for it, so it is skipped rather than rendered as an
@@ -223,20 +230,14 @@ export function createSource(
   const pagePages: PagePage[] = pages.getPages(locale)
   const publicationPages: PublicationPage[] = publications.getPages(locale)
 
-  const localizedPublications = chinese
-    ? publicationPages.map(withChineseFields)
-    : publicationPages
-  const localizedFundings = chinese
-    ? fundingPages.map(withChineseFields)
-    : fundingPages
+  // Publication bylines use the original names, not translated profile names.
+  const profiles = authorProfiles(authors.getPages('en'))
 
-  const profiles = authorProfiles(authorPages)
-
-  /** URLs that have a real `index.cn.mdx`, for `hreflang` alternates. */
+  /** Authored translations only, not materialized default copies. */
   const translatedUrls = new Set<string>()
   for (const source of [authors, events, fundings, pages, publications]) {
-    for (const page of source.getPages(TRANSLATION_LOCALE)) {
-      if (page.absolutePath?.endsWith(`.${TRANSLATION_LOCALE}.mdx`) === true) {
+    for (const page of source.getPages('zh')) {
+      if (/\.zh\.mdx?$/.test(page.absolutePath ?? '')) {
         translatedUrls.add(page.url)
       }
     }
@@ -246,18 +247,18 @@ export function createSource(
     locale,
     allAuthors: () => authorPages,
     allEvents: () => eventPages,
-    allFundings: () => localizedFundings,
+    allFundings: () => fundingPages,
     allPages: () => pagePages,
-    allPublications: () => localizedPublications,
+    allPublications: () => publicationPages,
     authorParams: () => authorPages.map(page => page.slugs),
     eventParams: () => paramsFor(events, locale),
     featuredPublications: () =>
-      byDateDesc(localizedPublications).filter(page => page.data.featured),
+      byDateDesc(publicationPages).filter(page => page.data.featured),
     findAuthor: slugs => findBySlugs(authorPages, slugs),
     findEvent: slugs => findBySlugs(eventPages, slugs),
-    findFunding: slugs => findBySlugs(localizedFundings, slugs),
+    findFunding: slugs => findBySlugs(fundingPages, slugs),
     findPage: slugs => findBySlugs(pagePages, slugs),
-    findPublication: slugs => findBySlugs(localizedPublications, slugs),
+    findPublication: slugs => findBySlugs(publicationPages, slugs),
     fundingParams: () => paramsFor(fundings, locale),
     hasTranslation: url => translatedUrls.has(url),
     /** The site root is `[]`, and it is the `/` route's page, not a standalone one. */
@@ -269,7 +270,7 @@ export function createSource(
     publicationParams: () => paramsFor(publications, locale),
     resolveAuthors: (ids, notes = []) => resolveAuthors(profiles, ids, notes),
     sortedEvents: () => byDateDesc(eventPages),
-    sortedFundings: () => byDateDesc(localizedFundings),
-    sortedPublications: () => byDateDesc(localizedPublications),
+    sortedFundings: () => byDateDesc(fundingPages),
+    sortedPublications: () => byDateDesc(publicationPages),
   } satisfies ContentSource
 }

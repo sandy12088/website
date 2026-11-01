@@ -16,9 +16,8 @@ import {
 /**
  * Every migrated file must satisfy the schema its collection declares.
  *
- * The schemas are read back from `source.config.ts` at runtime by
- * `scripts/check-content-schemas.mjs`, which runs the same validation inside the
- * build; this suite covers the front matter shape as data, so a bad key is
+ * Fumadocs runs the same schemas inside the build; this suite covers the merged
+ * front matter shape as data, so a bad value is
  * reported with its file and path rather than only surfacing in a Vite
  * transform error.
  */
@@ -63,11 +62,55 @@ describe('content model', () => {
   })
 })
 
+describe('Chinese content coverage', () => {
+  const entries = collectionEntries()
+  const translations = new Map(
+    entries
+      .filter(entry => entry.locale === 'zh')
+      .map(entry => [entry.file.replace(/\.zh\.mdx?$/, ''), entry]),
+  )
+
+  it.each(entries.filter(entry => entry.locale === 'default'))(
+    '$file provides Chinese introductions or explicit placeholders',
+    entry => {
+      if (entry.family === 'authors' && !entry.data['title']) return
+      const key = entry.file.replace(/\.mdx?$/, '')
+      const translatedFile = `${key}.zh.md`
+      const translated = translations.get(key)
+      if (['authors', 'pages', 'fundings'].includes(entry.family)) {
+        expect(translated, `Add ${translatedFile}`).toBeDefined()
+      }
+      for (const field of ['abstract', 'summary']) {
+        const original = entry.data[field]
+        if (typeof original !== 'string' || original.trim().length === 0)
+          continue
+        const chinese = translated?.data[field]
+        expect(
+          chinese,
+          `Add ${translatedFile} with Chinese ${field} or a placeholder`,
+        ).toMatch(/\p{Script=Han}/u)
+      }
+      const originalBody = entry.body.trim()
+      if (originalBody.length === 0) return
+      expect(
+        translated,
+        `Add ${translatedFile} for the translated body`,
+      ).toBeDefined()
+      if (translated) {
+        expect(
+          translated.body,
+          `Add Chinese body text or a placeholder to ${translated.file}`,
+        ).toMatch(/\p{Script=Han}/u)
+      }
+    },
+  )
+})
+
 describe('collection globs', () => {
   /**
    * The collection's own glob decides which files the loaders ever see, and the
    * i18n `dot` parser only splits them afterwards. A pattern that misses
-   * `index.cn.mdx` therefore publishes no Chinese content at all — this is the
+   * `index.zh.md` therefore publishes no Chinese content at all — this is the
    * guard for that (the bug the split fixed).
    */
   it('matches the translated sibling of every entry', () => {
@@ -78,7 +121,7 @@ describe('collection globs', () => {
       const matched = new Set(
         patterns.flatMap(pattern => globSync(pattern, { cwd: dir })),
       )
-      const translated = globSync('**/index.cn.mdx', { cwd: dir })
+      const translated = globSync('**/index.zh.{md,mdx}', { cwd: dir })
 
       for (const file of translated) {
         translations += 1
@@ -98,7 +141,7 @@ describe('collection globs', () => {
       )
 
       for (const file of matched) {
-        expect(path.basename(file)).toMatch(/^index(\.cn)?\.mdx$/)
+        expect(path.basename(file)).toMatch(/^index(\.(en|zh))?\.mdx?$/)
       }
     }
   })

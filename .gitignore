@@ -11,9 +11,11 @@ pages.gen.ts
 # Tooling scratch
 .emit/
 .cache/
+.vitest/
 .venv/
 .env
 *.tsbuildinfo
 
 # Editor / OS
 .DS_Store
+public/

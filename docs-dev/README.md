@@ -15,8 +15,9 @@
 ## Layout
 
 - `content/` — the one content tree, one directory per entry. It belongs to the
-  repository, not to a site.
-- `public/` — the one asset tree (avatars, PDFs, badges). Both sites build with
+  repository, not to a site. Author images and publication attachments live
+  beside each entry's MDX files.
+- `public/` — site-wide assets (icons and badges). Both sites build with
   `publicDir` pointed here.
 - `packages/site-kit/` — everything shared:
   - `src/components/` — StyleX-styled components used by both sites' views.
@@ -207,7 +208,7 @@ shared table.
   entry names the languages that serve it:
 
   ```ts
-  { component: PeopleList, locales: ['cn', 'en'], path: '/people' }
+  { component: PeopleList, locales: ['zh', 'en'], path: '/people' }
   ```
 
   `locales` is exhaustive: a language that is not listed does not serve the route, and
@@ -242,8 +243,11 @@ what the two builds published.
 
 ## Localization
 
-One content tree serves both sites. An entry is a directory with an `index.mdx`
-(English) and an optional `index.cn.mdx` (Chinese):
+One content tree serves both sites. An entry uses `index.md` or `index.mdx` as
+its neutral default. Optional `index.en.md` and `index.zh.md` files override it
+for the site's `locale: 'en'` or `locale: 'zh'`. Localized `.mdx` files are also
+supported when the body needs JSX. Do not provide both extensions for the same
+entry and language; duplicate entries fail validation.
 
 ```
 content/
@@ -255,26 +259,51 @@ content/
   events/<slug>/index.mdx         -> /event/<slug>/
 ```
 
-The collection's `files` glob has to match **both** names: the i18n `dot` parser only
-assigns a language to files the collection already imported, so a pattern of
-`*/index.mdx` publishes the English body and drops every translation.
+The collection's `files` glob matches default, `.en` and `.zh` files with either
+extension. The i18n `dot` parser only sees files the collection imported.
 `packages/site-kit/src/__tests__/collections.test.ts` guards that.
 
-Each site then picks one storage of the same tree:
+The shared Vite content plugin merges the default and the requested language
+**before** schema validation and default values are applied:
 
-- English site: `getPages('en')`, `hideLocale: 'default-locale'` (nothing is prefixed).
-- Chinese site: `getPages('cn')` with `fallbackLanguage: 'en'` and
-  `hideLocale: 'always'`. The `cn` storage inherits the English one, so an untranslated
-  entry still has a page — it just renders the English body — and the route sets of the
-  two sites stay identical, which is what makes the language switch a plain
-  path-preserving link. For untranslated entries the Chinese site prefers the authored
-  `title_zh` / `abstract_zh` front matter when it exists.
-- `content/pages/index.mdx` (the home page) has no Chinese translation yet, so the
-  Chinese home page still renders the English hero until `content/pages/index.cn.mdx`
-  exists.
+- Missing fields inherit from the default. Objects merge recursively; arrays
+  replace as a whole, including the home page's `sections` array.
+- Explicit `''`, `[]` and `false` override the default. `null` is not a deletion
+  instruction; it must be accepted by the field's schema.
+- A nonempty localized body replaces the default body and its table of contents.
+  An omitted or whitespace-only body reuses the compiled default body, table of
+  contents and search data, so a `.md` overlay can inherit JSX from `.mdx`.
+  To show no body,
+  use a Markdown comment such as `<!-- No body for this language. -->`.
+- If a language file is absent, that locale uses the neutral default, **not**
+  the other language's overrides. A language-only entry without a default must
+  satisfy the full schema and is available only in that language.
+- Both origins keep unprefixed URLs. Publication bylines use English-profile
+  names on both sites; people pages use the site's locale. Group identifiers
+  such as `Graduate Students` remain stable and their UI headings are translated.
 
-Front matter is validated by the schema at build time, so a typo fails the build with the
-file and the offending key. `pnpm test` runs the same validation directly.
+For example, a publication's `index.mdx` can own the title, date, authors and
+attachments, while `index.zh.md` contains only:
+
+```yaml
+---
+abstract: 中文摘要待补充。
+summary: 中文简介待补充。
+---
+```
+
+Use ordinary `title`, `abstract` and `summary` keys in language files, not
+`title_zh`, `abstract_zh` or `summary_zh`. Shared metadata does not need copying.
+Original publication titles can remain in English.
+
+Provide Chinese counterparts for each titled author, standalone page and funded
+project, and for nonempty publication/event introductions. If a translation is not
+ready, write an explicit placeholder such as `中文介绍待补充。` or `中文摘要待补充。`.
+Fallback is available, but it does not replace this editorial requirement.
+`pnpm test` checks the merged Chinese content and reports missing translations.
+
+Merged front matter is validated by the schema at build time. `pnpm test` runs
+the same merge and validation directly, plus real compiler/fallback checks.
 
 Each site's `.source/` is generated, and it is needed before `pnpm typecheck` can resolve
 front-matter types. `pnpm build` and `pnpm dev` write it, so a fresh checkout goes
@@ -337,5 +366,17 @@ hook for an app that ships its own `index.html` — not for the fallback documen
 route here renders, since they all set `unstable_disableSSR`. Builds are unaffected; the
 rules land in the site's stylesheet either way.
 
-`public/` holds the files copied verbatim into each build: author avatars, publication
-PDFs, the Inter variable font, KaTeX fonts and the Creative Commons badge.
+Author images belong in `content/authors/<slug>/`; BibTeX files and PDFs belong in
+`content/publications/<slug>/`. Keep their original filenames, such as `avatar.jpg`,
+`cite.bib` or a named poster PDF. Both languages share these files.
+
+The shared `content-assets.ts` plugin serves bundle resources directly in development
+and emits them into each site's `dist/public/` during the client build. Their URLs
+omit `content/`: `/authors/<slug>/avatar.jpg` and `/publications/<slug>/cite.bib`.
+Use root-relative URLs such as `/publications/<slug>/poster.pdf` in front matter.
+Only JPG, JPEG, PNG, GIF, WebP, SVG, BibTeX and PDF files are published from these
+two collections. MDX sources and hidden files are not published as resources.
+Do not keep duplicate bundle resources under `public/`.
+
+`public/` holds site-wide files copied verbatim into each build, such as icons and
+the Creative Commons badge. The self-hosted fonts live under the kit's styles directory.

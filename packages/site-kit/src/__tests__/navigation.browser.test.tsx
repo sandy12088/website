@@ -198,7 +198,7 @@ describe('responsive navigation', () => {
     expect(screen.container.querySelector('#nav-menu')).toBe(originalList)
   })
 
-  it.each(['en', 'cn'] as const)(
+  it.each(['en', 'zh'] as const)(
     'uses localized navigation labels in %s',
     async locale => {
       const localized = translate(locale).navigation

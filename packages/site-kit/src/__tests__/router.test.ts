@@ -42,7 +42,7 @@ vi.mock('../views/index.ts', () => ({
  * language gate, the catch-all's exclusion rule and the site file conventions.
  */
 
-const LOCALES: readonly Locale[] = ['cn', 'en']
+const LOCALES: readonly Locale[] = ['zh', 'en']
 const CATCH_ALL = '/[...slugs]'
 
 /** Enough of a site for the document factories; nothing here renders or responds. */
@@ -54,7 +54,7 @@ function fakeSite(locale: Locale) {
       locale: 'en',
     },
     baseUrl: 'https://example.com',
-    languageCode: locale === 'cn' ? 'zh-Hans' : 'en-US',
+    languageCode: locale === 'zh' ? 'zh-Hans' : 'en-US',
     locale,
     orgName: 'Example',
     title: 'Example',
@@ -146,7 +146,7 @@ describe('shared route table', () => {
     // The language switch mirrors the current path onto the other site, so a
     // path only one language serves is a broken link. Relax this expectation —
     // and the switch's fallback — when the two languages deliberately diverge.
-    expect(pathsFor('en')).toEqual(pathsFor('cn'))
+    expect(pathsFor('en')).toEqual(pathsFor('zh'))
   })
 
   it('keeps the catch-all last, so it can leave claimed paths alone', () => {
@@ -156,10 +156,10 @@ describe('shared route table', () => {
 
   it('refuses a language a route does not declare', () => {
     expect(() => {
-      assertRouteServes({ locales: ['en'], path: '/english-only' }, 'cn')
-    }).toThrow(/is not served in "cn"/)
+      assertRouteServes({ locales: ['en'], path: '/english-only' }, 'zh')
+    }).toThrow(/is not served in "zh"/)
     expect(() => {
-      assertRouteServes({ locales: ['cn', 'en'], path: '/both' }, 'cn')
+      assertRouteServes({ locales: ['zh', 'en'], path: '/both' }, 'zh')
     }).not.toThrow()
   })
 })
@@ -176,10 +176,10 @@ describe('createSharedRoutes', () => {
   })
 
   it('stamps the language and the rendering policy on every page', () => {
-    const { registered } = register('cn')
+    const { registered } = register('zh')
 
     for (const page of registered.pageInputs) {
-      expect(page.locale).toBe('cn')
+      expect(page.locale).toBe('zh')
       expect(page).toMatchObject({
         render: 'static',
         unstable_disableSSR: true,
@@ -190,7 +190,7 @@ describe('createSharedRoutes', () => {
   it('registers only the routes the language serves', () => {
     // Every entry serves both languages today; the gate is what makes a
     // language-only entry possible without touching the other app.
-    const { shared } = register('cn')
+    const { shared } = register('zh')
     expect(shared.patterns.has(CATCH_ALL)).toBe(true)
   })
 

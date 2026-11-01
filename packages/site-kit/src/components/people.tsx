@@ -3,6 +3,7 @@ import type { AuthorPage } from '../content/source.ts'
 
 import * as stylex from '@stylexjs/stylex'
 
+import { translate } from '../content/strings.ts'
 import { siteContext } from '../site-context.ts'
 import { styles as blockStyles } from './block.stylex.ts'
 import { BlockHeading } from './block.tsx'
@@ -45,7 +46,8 @@ export function PeopleGrid({
   subtitle,
   title,
 }: PeopleGridProps) {
-  const { source } = siteContext()
+  const { locale, source } = siteContext()
+  const labels = translate(locale).peopleGroups
   const grouped = source.peopleByGroup(groups)
   const groupHeadingAs = headingAs === 'h1' ? 'h2' : 'h3'
 
@@ -73,7 +75,7 @@ export function PeopleGrid({
                   id={headingId}
                   {...stylex.props(styles.groupHeading)}
                 >
-                  {group.group}
+                  {labels[group.group] ?? group.group}
                 </GroupHeading>
                 <span aria-hidden="true" {...stylex.props(styles.groupRule)} />
               </div>
