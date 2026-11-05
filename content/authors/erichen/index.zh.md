@@ -14,8 +14,8 @@ education:
   - area: 理论物理硕士
     institution: 北京师范大学
     date_start: 2024-09-01
-    date_end: ''
-    summary: '导师：马宇翰副教授'
+    date_end: null
+    supervisor: '马宇翰'
   - area: 计算机科学与技术学士
     institution: 北京师范大学
     date_start: 2019-09-01
