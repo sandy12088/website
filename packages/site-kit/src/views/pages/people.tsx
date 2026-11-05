@@ -49,7 +49,7 @@ export function PeopleList() {
         showOrganizations={false}
         showRole
         showSocial
-        title={locale === 'zh' ? '全体成员' : 'Meet the team'}
+        title={locale === 'zh' ? '团队成员' : 'Meet the team'}
       />
     </div>
   )

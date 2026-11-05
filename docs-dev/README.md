@@ -251,13 +251,15 @@ entry and language; duplicate entries fail validation.
 
 ```
 content/
-  pages/index.mdx                 -> /
   pages/publications/index.mdx    -> /publications/
   publications/<slug>/index.mdx   -> /publication/<slug>/
   authors/<slug>/index.mdx        -> /people/<slug>/
   fundings/<slug>/index.mdx       -> /funding/<slug>/
   events/<slug>/index.mdx         -> /event/<slug>/
 ```
+
+The home route `/` renders the shared `HomePage` TSX component directly, with
+localized copy in `packages/site-kit/src/views/pages/home.tsx`.
 
 The collection's `files` glob matches default, `.en` and `.zh` files with either
 extension. The i18n `dot` parser only sees files the collection imported.
@@ -267,7 +269,7 @@ The shared Vite content plugin merges the default and the requested language
 **before** schema validation and default values are applied:
 
 - Missing fields inherit from the default. Objects merge recursively; arrays
-  replace as a whole, including the home page's `sections` array.
+  replace as a whole, including a content page's `sections` array.
 - Explicit `''`, `[]` and `false` override the default. `null` is not a deletion
   instruction; it must be accepted by the field's schema.
 - A nonempty localized body replaces the default body and its table of contents.

@@ -22,7 +22,7 @@ export {
   siteHref,
 } from './links.ts'
 export type { SiteLink } from './links.ts'
-export { schemaFor, schemas } from './schemas.ts'
+export { schemaFor, schemas } from './schema.ts'
 export type {
   AuthorFrontmatter,
   ContentFamily,
@@ -31,7 +31,7 @@ export type {
   PageFrontmatter,
   PageSection,
   PublicationFrontmatter,
-} from './schemas.ts'
+} from './schema.ts'
 export { peopleGroups } from './sort.ts'
 export type { UserGroup } from './sort.ts'
 export { createSource } from './source.ts'

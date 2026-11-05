@@ -23,7 +23,7 @@ import { afterAll, beforeAll, expect, it } from 'vitest'
 
 import { contentOverlays } from '../content-overlays.ts'
 import { COLLECTION_GLOBS } from '../content/collections.ts'
-import { schemas } from '../content/schemas.ts'
+import { schemas } from '../content/schema.ts'
 import { createSource } from '../content/source.ts'
 
 let root: string

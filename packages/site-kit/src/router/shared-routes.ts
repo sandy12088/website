@@ -1,14 +1,17 @@
-import type { SiteApi, SitePage } from './types.ts'
+import type { SiteApi, SitePage } from './types.ts';
 
-import { feedHandler } from '../routes/feed.ts'
-import { robotsHandler } from '../routes/robots.ts'
-import { sitemapHandler } from '../routes/sitemap.ts'
-import { NotFound } from '../shell/not-found.tsx'
+
+
+import { feedHandler } from '../routes/feed.ts';
+import { robotsHandler } from '../routes/robots.ts';
+import { sitemapHandler } from '../routes/sitemap.ts';
+import { NotFound } from '../shell/not-found.tsx';
 import {
   EventsDetail,
   EventsList,
   FundingsDetail,
   FundingsList,
+  HomePage,
   LandingPage,
   PeopleDetail,
   PeopleList,
@@ -34,7 +37,7 @@ import {
  * entries above it have not.
  */
 export const sitePages = [
-  { component: LandingPage, locales: ['zh', 'en'], path: '/' },
+  { component: HomePage, locales: ['zh', 'en'], path: '/' },
   { component: NotFound, locales: ['zh', 'en'], path: '/404' },
 
   { component: PeopleList, locales: ['zh', 'en'], path: '/people' },

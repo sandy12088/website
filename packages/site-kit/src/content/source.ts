@@ -14,7 +14,7 @@ import type { Locale, SiteConfig } from '../site/types.ts'
 import type { ResolvedAuthor } from './authors.ts'
 // `schemas` is only read for its inferred types here; the collection definitions
 // that consume it at runtime live in `collections.ts`.
-import type { PageFrontmatter, schemas } from './schemas.ts'
+import type { PageFrontmatter, schemas } from './schema.ts'
 
 import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'

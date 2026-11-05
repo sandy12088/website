@@ -70,12 +70,13 @@ export function sitemapHandler(
           entry.lastmod.length > 0
             ? `<lastmod>${escapeXml(entry.lastmod)}</lastmod>`
             : ''
-        const alternates = source.hasTranslation(entry.loc)
-          ? [
-              `<xhtml:link rel="alternate" hreflang="${site.locale === 'zh' ? 'zh-Hans' : 'en'}" href="${escapeXml(absoluteUrl(site.baseUrl, path))}"/>`,
-              `<xhtml:link rel="alternate" hreflang="${alternateLanguage}" href="${escapeXml(alternateUrl(site.alternate.baseUrl, path))}"/>`,
-            ].join('')
-          : ''
+        const alternates =
+          entry.loc === '/' || source.hasTranslation(entry.loc)
+            ? [
+                `<xhtml:link rel="alternate" hreflang="${site.locale === 'zh' ? 'zh-Hans' : 'en'}" href="${escapeXml(absoluteUrl(site.baseUrl, path))}"/>`,
+                `<xhtml:link rel="alternate" hreflang="${alternateLanguage}" href="${escapeXml(alternateUrl(site.alternate.baseUrl, path))}"/>`,
+              ].join('')
+            : ''
         return `<url>${loc}${lastmod}<changefreq>weekly</changefreq>${alternates}</url>`
       })
       .join('')

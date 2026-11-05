@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import { defineCollections, defineDocs } from 'fumadocs-mdx/config'
 
-import { schemas } from './schemas.ts'
+import { schemas } from './schema.ts'
 
 /**
  * Collection definitions for the shared content tree.

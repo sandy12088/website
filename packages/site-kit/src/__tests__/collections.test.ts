@@ -1,4 +1,4 @@
-import type { ContentFamily } from '../content/schemas.ts'
+import type { ContentFamily } from '../content/schema.ts'
 
 import { globSync } from 'node:fs'
 import path from 'node:path'
@@ -6,7 +6,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { COLLECTION_GLOBS } from '../content/collections.ts'
-import { schemaFor } from '../content/schemas.ts'
+import { schemaFor } from '../content/schema.ts'
 import {
   authorSlugs,
   collectionEntries,

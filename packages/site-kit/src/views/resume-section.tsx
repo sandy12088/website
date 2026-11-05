@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { PageSection } from '../content/schemas.ts'
+import type { PageSection } from '../content/schema.ts'
 
 import * as stylex from '@stylexjs/stylex'
 

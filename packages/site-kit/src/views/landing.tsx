@@ -1,20 +1,23 @@
-import * as stylex from '@stylexjs/stylex'
+import * as stylex from '@stylexjs/stylex';
 
-import { styles as blockStyles } from '../components/block.stylex.ts'
-import { HeroDiagram } from '../components/hero-diagram.tsx'
-import { Hero } from '../components/hero.tsx'
-import { PeopleGrid } from '../components/people.tsx'
-import { renderInlineMarkdown } from '../content/inline-markdown.tsx'
-import { resolveInternal } from '../content/links.ts'
-import { translate } from '../content/strings.ts'
-import { siteContext } from '../site-context.ts'
-import { Collection } from './collection.tsx'
-import { Resume } from './resume-section.tsx'
+
+
+import { styles as blockStyles } from '../components/block.stylex.ts';
+import { HeroDiagram } from '../components/hero-diagram.tsx';
+import { Hero } from '../components/hero.tsx';
+import { PeopleGrid } from '../components/people.tsx';
+import { renderInlineMarkdown } from '../content/inline-markdown.tsx';
+import { resolveInternal } from '../content/links.ts';
+import { translate } from '../content/strings.ts';
+import { siteContext } from '../site-context.ts';
+import { Collection } from './collection.tsx';
+import { Resume } from './resume-section.tsx';
+
 
 /**
  * Landing page renderer.
  *
- * Every page in `content/pages/` is a `sections:` array. Each entry names a block
+ * Content pages can declare a `sections:` array. Each entry names a block
  * and carries its `content`; the blocks themselves live in `src/components/`.
  *
  * Vertical rhythm belongs to the design system (`blockStyles.section`) rather
@@ -22,14 +25,11 @@ import { Resume } from './resume-section.tsx'
  * coherent as sections are added, and the hero is the only flush section.
  */
 export interface LandingPageProps {
-  /**
-   * Slugs identifying the page inside the `pages` collection; absent for the
-   * home page, which the `/` route renders.
-   */
-  slugs?: string[]
+  /** Slugs identifying the page inside the `pages` collection. */
+  slugs: string[]
 }
 
-export function LandingPage({ slugs = [] }: LandingPageProps) {
+export function LandingPage({ slugs }: LandingPageProps) {
   const { locale, source } = siteContext()
   const page = source.findPage(slugs)
   if (!page) return null
