@@ -1,21 +1,20 @@
-import * as stylex from '@stylexjs/stylex'
+import * as stylex from '@stylexjs/stylex';
 
-import { styles as biographyStyles } from '../../components/biography.stylex.ts'
-import { styles as blockStyles } from '../../components/block.stylex.ts'
-import { HeroDiagram } from '../../components/hero-diagram.tsx'
-import { Hero } from '../../components/hero.tsx'
-import { PeopleGrid } from '../../components/people.tsx'
-import {
-  AuthorBio,
-  PersonHeader,
-  ProfileFacts,
-} from '../../components/resume.tsx'
-import { normalizeEducation } from '../../content/education.ts'
-import { renderInlineMarkdown } from '../../content/inline-markdown.tsx'
-import { resolveInternal } from '../../content/links.ts'
-import { translate } from '../../content/strings.ts'
-import { siteContext } from '../../site-context.ts'
-import { Collection } from '../collection.tsx'
+
+
+import { styles as biographyStyles } from '../../components/biography.stylex.ts';
+import { styles as blockStyles } from '../../components/block.stylex.ts';
+import { HeroDiagram } from '../../components/hero-diagram.tsx';
+import { Hero } from '../../components/hero.tsx';
+import { PeopleGrid } from '../../components/people.tsx';
+import { AuthorBio, PersonHeader, ProfileFacts } from '../../components/resume.tsx';
+import { normalizeEducation } from '../../content/education.ts';
+import { renderInlineMarkdown } from '../../content/inline-markdown.tsx';
+import { resolveInternal } from '../../content/links.ts';
+import { translate } from '../../content/strings.ts';
+import { siteContext } from '../../site-context.ts';
+import { Collection } from '../collection.tsx';
+
 
 const copy = {
   en: {
@@ -106,13 +105,7 @@ export function HomePage() {
       </section>
       <section {...stylex.props(blockStyles.section)}>
         <PeopleGrid
-          groups={[
-            'Principal Investigator',
-            'Faculty Members',
-            'Postdoctoral Scholars',
-            'Graduate Students',
-            'Students',
-          ]}
+          groups={['pi', 'faculty', 'postdoc', 'grad', 'bachelor']}
           showInterests={false}
           showOrganizations={false}
           showRole

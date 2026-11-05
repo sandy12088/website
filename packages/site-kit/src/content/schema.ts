@@ -15,6 +15,40 @@
 import { pageSchema } from 'fumadocs-core/source/schema'
 import { z } from 'zod'
 
+export const PUBLICATION_TYPES = [
+  'article-journal',
+  'article-magazine',
+  'article-newspaper',
+  'book',
+  'chapter',
+  'conference-paper',
+  'manuscript',
+  'patent',
+  'poster',
+  'preprint',
+  'report',
+  'software',
+  'thesis',
+] as const
+export const PublicationType = z.enum(PUBLICATION_TYPES)
+export type PublicationType = z.infer<typeof PublicationType>
+
+export const USER_GROUPS = [
+  'pi',
+  'faculty',
+  'postdoc',
+  'phd',
+  'grad',
+  'bachelor',
+  'ra',
+  'collaborator',
+  'visiting',
+  'alumni',
+  'invisible',
+] as const
+export const UserGroup = z.enum(USER_GROUPS)
+export type UserGroup = z.infer<typeof UserGroup>
+
 const urlFields = {
   url_code: z.string().default(''),
   url_dataset: z.string().default(''),
@@ -37,23 +71,6 @@ const mediaFields = {
     })
     .default(imageDefaults),
 } as const
-
-/** Publication kinds seen in `publication_types`, plus the usual CSL names. */
-const publicationTypeSchema = z.enum([
-  'article-journal',
-  'article-magazine',
-  'article-newspaper',
-  'book',
-  'chapter',
-  'conference-paper',
-  'manuscript',
-  'patent',
-  'poster',
-  'preprint',
-  'report',
-  'software',
-  'thesis',
-])
 
 /**
  * Attachments. Some entries carry only an `icon` (rendered from the `icon_pack`
@@ -80,7 +97,7 @@ const publicationSchema = pageSchema.extend({
   projects: z.array(z.string()).default([]),
   publication: z.string().default(''),
   publication_short: z.string().default(''),
-  publication_types: z.array(publicationTypeSchema).default([]),
+  publication_types: z.array(PublicationType).default([]),
   publishDate: z.string().optional(),
   slides: z.string().default(''),
   subtitle: z.string().default(''),
@@ -146,11 +163,6 @@ const awardSchema = z.object({
   url: z.string().default(''),
 })
 
-/**
- * One resume entry.
- *
- *
- */
 const lifeStageSchema = z.object({
   area: z.string().optional(),
   button: z.object({ text: z.string(), url: z.string() }).optional(),
@@ -199,139 +211,8 @@ const authorSchema = pageSchema.extend({
     })
     .optional(),
   superuser: z.boolean().default(false),
-  user_groups: z.array(z.string()).default([]),
+  user_groups: z.array(UserGroup).default(['invisible']),
   work: z.array(lifeStageSchema).default([]),
-})
-
-/** A call to action: the hero buttons and the section-level `button`. */
-const actionSchema = z.object({
-  icon: z.string().optional(),
-  text: z.string(),
-  url: z.string(),
-})
-
-/**
- * Section `content:` and `design:` blocks.
- *
- * Declared as named constants so their defaults can be typed with
- * `z.infer<typeof …>`. `.default({})` does not type-check: zod expects the
- * *output* type, whose nested fields already carry their own defaults.
- */
-const sectionContentSchema = z.object({
-  announcement: z
-    .object({
-      link: actionSchema.omit({ icon: true }).optional(),
-      text: z.string(),
-    })
-    .optional(),
-  button: actionSchema.optional(),
-  count: z.number().default(0),
-  filters: z
-    .object({
-      exclude_featured: z.boolean().default(false),
-      exclude_future: z.boolean().default(false),
-      exclude_past: z.boolean().default(false),
-      featured_only: z.boolean().default(false),
-      folders: z.array(z.string()).default([]),
-    })
-    .default({
-      exclude_featured: false,
-      exclude_future: false,
-      exclude_past: false,
-      featured_only: false,
-      folders: [],
-    }),
-  order: z.enum(['asc', 'desc']).default('desc'),
-  primary_action: actionSchema.optional(),
-  secondary_action: actionSchema.optional(),
-  sort_ascending: z.boolean().default(true),
-  sort_by: z.string().default('Params.last_name'),
-  subtitle: z.string().default(''),
-  text: z.string().default(''),
-  title: z.string().default(''),
-  user_groups: z.array(z.string()).default([]),
-  username: z.string().default(''),
-})
-
-const sectionDesignSchema = z.object({
-  columns: z.number().default(1),
-  date_format: z.string().default('January 2006'),
-  fill_image: z.boolean().default(true),
-  is_education_first: z.boolean().default(false),
-  no_padding: z.boolean().default(false),
-  show_interests: z.boolean().default(false),
-  show_organizations: z.boolean().default(false),
-  show_role: z.boolean().default(true),
-  show_social: z.boolean().default(false),
-  view: z
-    .enum(['article-grid', 'card', 'citation', 'date-title-summary'])
-    .default('citation'),
-})
-
-type SectionContent = z.infer<typeof sectionContentSchema>
-type SectionDesign = z.infer<typeof sectionDesignSchema>
-
-/**
- * Defaults applied when a section omits a field.
- *
- * Typed as the full schema output, because `.default()` requires the complete
- * type: nested objects such as `filters` are required in the output even though
- * they are optional in the authored front matter.
- */
-function sectionContentDefaults(): SectionContent {
-  return {
-    announcement: undefined,
-    button: undefined,
-    count: 0,
-    filters: {
-      exclude_featured: false,
-      exclude_future: false,
-      exclude_past: false,
-      featured_only: false,
-      folders: [],
-    },
-    order: 'desc',
-    primary_action: undefined,
-    secondary_action: undefined,
-    sort_ascending: true,
-    sort_by: 'Params.last_name',
-    subtitle: '',
-    text: '',
-    title: '',
-    user_groups: [],
-    username: '',
-  }
-}
-
-function sectionDesignDefaults(): SectionDesign {
-  return {
-    columns: 1,
-    date_format: 'January 2006',
-    fill_image: true,
-    is_education_first: false,
-    no_padding: false,
-    show_interests: false,
-    show_organizations: false,
-    show_role: true,
-    show_social: false,
-    view: 'citation',
-  }
-}
-
-/** Page sections: the replacement for Hugo's landing-page `sections:` array. */
-const sectionSchema = z.object({
-  block: z.enum([
-    'collection',
-    'community/people',
-    'hero',
-    'resume-awards',
-    'resume-biography',
-    'resume-biography-3',
-    'resume-experience',
-  ]),
-  content: sectionContentSchema.default(sectionContentDefaults),
-  design: sectionDesignSchema.default(sectionDesignDefaults),
-  id: z.string().optional(),
 })
 
 const pageContentSchema = pageSchema.extend({
@@ -347,14 +228,7 @@ const pageContentSchema = pageSchema.extend({
       image: z.string().default(''),
     })
     .optional(),
-  design: z
-    .object({
-      spacing: z.string().default('3rem'),
-    })
-    .default({ spacing: '3rem' }),
-
   draft: z.boolean().default(false),
-  sections: z.array(sectionSchema).default([]),
   share: z.boolean().default(false),
 })
 
@@ -379,7 +253,6 @@ export function schemaFor(family: ContentFamily) {
   return schemas[family]
 }
 
-export type PageSection = z.infer<typeof sectionSchema>
 export type PageFrontmatter = z.infer<typeof pageContentSchema>
 export type PublicationFrontmatter = z.infer<typeof publicationSchema>
 export type FundingFrontmatter = z.infer<typeof fundingSchema>

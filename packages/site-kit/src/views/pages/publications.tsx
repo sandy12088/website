@@ -10,9 +10,8 @@ import { PublicationDetail } from './publication-detail.tsx'
 /**
  * `/publications/`.
  *
- * The heading and intro come from `content/pages/publications/index.mdx`, the
- * same front matter the old collection block read, so the page stays data-driven
- * rather than hard-coded here. The archive itself is the shared year-grouped
+ * The heading and description come from `content/pages/publications/index.mdx`.
+ * This component owns the layout. The archive is the shared year-grouped
  * index, with `h2` year headings because the page owns the only `h1`.
  */
 export function PublicationsList() {
@@ -20,16 +19,12 @@ export function PublicationsList() {
   const frontMatter = source.findPage(['publications'])
   const heading =
     frontMatter === undefined ? 'Publications' : frontMatter.data.title
-  const intro = frontMatter?.data.sections[0]?.content.text ?? ''
+  const intro = frontMatter?.data.description
 
   return (
     <div {...stylex.props(shared.page)}>
       <div {...stylex.props(blockStyles.measure)}>
-        <BlockHeading
-          as="h1"
-          subtitle={intro.length > 0 ? intro : undefined}
-          title={heading}
-        />
+        <BlockHeading as="h1" subtitle={intro} title={heading} />
         <PublicationList items={source.sortedPublications()} yearAs="h2" />
       </div>
     </div>

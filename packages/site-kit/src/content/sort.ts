@@ -1,6 +1,7 @@
 import type { AuthorPage, StoredPage } from './source.ts'
 
 import { timestamp } from './format.ts'
+import { USER_GROUPS } from './schema.ts'
 
 /**
  * Ordering rules, matching what the Hugo templates produced.
@@ -12,23 +13,10 @@ import { timestamp } from './format.ts'
  * These are pure functions over an already-loaded page list: which pages a site
  * has (and in which language) is the source factory's business.
  */
-
-const USER_GROUPS = [
-  'Principal Investigator',
-  'Faculty Members',
-  'Postdoctoral Scholars',
-  'Graduate Students',
-  'Students',
-  'Research Assistants',
-  'Collaborators',
-  'Visiting Scholars',
-  'Alumni',
-] as const
-
 export type UserGroup = (typeof USER_GROUPS)[number]
 
 /** Every supported `user_groups` value, in display order. */
-export function peopleGroups(): string[] {
+export function peopleGroups(): UserGroup[] {
   return [...USER_GROUPS]
 }
 
@@ -56,8 +44,8 @@ export function byDateDesc<T extends { data: { date?: string } }>(
 /** People grouped for the "Meet the incredible team" block, in declaration order. */
 export function peopleByGroup(
   pages: readonly AuthorPage[],
-  groups: readonly string[] = USER_GROUPS,
-): { group: string; people: AuthorPage[] }[] {
+  groups: readonly UserGroup[] = USER_GROUPS,
+): { group: UserGroup; people: AuthorPage[] }[] {
   return groups
     .map(group => ({
       group,

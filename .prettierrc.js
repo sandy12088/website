@@ -13,7 +13,6 @@ const config = {
   bracketSameLine: false,
   arrowParens: 'avoid',
   plugins: [
-    '@prettier/plugin-oxc',
     'prettier-plugin-packagejson',
     '@ianvs/prettier-plugin-sort-imports',
   ],

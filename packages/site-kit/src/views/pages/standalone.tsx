@@ -4,14 +4,11 @@ import { unstable_notFound } from 'waku/router/server'
 import { getMdxComponents } from '../../components/mdx.tsx'
 import { shared } from '../../components/views.stylex.ts'
 import { siteContext } from '../../site-context.ts'
-import { LandingPage } from '../landing.tsx'
 
 /**
  * A standalone page from the `pages` collection, e.g. `/privacy/` or `/terms/`.
  *
- * Pages with a `sections:` array render through the landing blocks; a page with
- * only front matter and a Markdown body (the legal pages) renders as a plain
- * article instead of an empty frame, which is what the previous build did.
+ * The component owns the article layout; MDX supplies only the page content.
  * A page the source does not know about is a 404 rather than an empty document,
  * so a translation that never got imported fails the build instead of publishing
  * a blank page.
@@ -20,10 +17,6 @@ export function StandalonePage({ slugs = [] }: { slugs?: string[] }) {
   const { source } = siteContext()
   const page = source.findPage(slugs)
   if (!page) unstable_notFound()
-
-  if (page.data.sections.length > 0) {
-    return <LandingPage slugs={slugs} />
-  }
 
   const MDX = page.data.body
 

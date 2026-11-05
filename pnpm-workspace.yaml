@@ -51,6 +51,7 @@ catalog:
 
   zod: ^4.6.5
   eslint: ^10.14.0
+  ts-pattern: ^5.9.2
 
 overrides:
   'es-set-tostringtag': 'npm:@nolyfill/es-set-tostringtag@^1'

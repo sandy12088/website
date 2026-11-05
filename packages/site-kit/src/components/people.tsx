@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { UserGroup } from '../content/schema.ts'
 import type { AuthorPage } from '../content/source.ts'
 
 import * as stylex from '@stylexjs/stylex'
@@ -17,7 +18,7 @@ export interface PeopleGridProps {
   /** `content.text`, already parsed. */
   intro?: ReactNode
   /** `content.user_groups`; only groups with members are rendered. */
-  groups: readonly string[]
+  groups: readonly Exclude<UserGroup, 'invisible'>[]
   showRole: boolean
   showSocial: boolean
   showInterests: boolean
@@ -75,7 +76,7 @@ export function PeopleGrid({
                   id={headingId}
                   {...stylex.props(styles.groupHeading)}
                 >
-                  {labels[group.group] ?? group.group}
+                  {labels[group.group]}
                 </GroupHeading>
                 <span aria-hidden="true" {...stylex.props(styles.groupRule)} />
               </div>

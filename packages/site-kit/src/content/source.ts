@@ -12,9 +12,7 @@ import type { DocData } from 'fumadocs-mdx/runtime/types'
 import type { z } from 'zod'
 import type { Locale, SiteConfig } from '../site/types.ts'
 import type { ResolvedAuthor } from './authors.ts'
-// `schemas` is only read for its inferred types here; the collection definitions
-// that consume it at runtime live in `collections.ts`.
-import type { PageFrontmatter, schemas } from './schema.ts'
+import type { PageFrontmatter, schemas, UserGroup } from './schema.ts'
 
 import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'
@@ -96,9 +94,9 @@ export interface ContentSource {
   sortedFundings(): FundingPage[]
   sortedPublications(): PublicationPage[]
   featuredPublications(): PublicationPage[]
-  peopleGroups(): string[]
-  peopleByGroup(groups?: readonly string[]): {
-    group: string
+  peopleGroups(): UserGroup[]
+  peopleByGroup(groups?: readonly UserGroup[]): {
+    group: UserGroup
     people: AuthorPage[]
   }[]
   resolveAuthors(
@@ -264,7 +262,7 @@ export function createSource(
     /** The site root is `[]`, and it is the `/` route's page, not a standalone one. */
     pageParams: () =>
       paramsFor(pages, locale).filter(slugs => slugs.length > 0),
-    peopleByGroup: (groups?: readonly string[]) =>
+    peopleByGroup: (groups?: readonly UserGroup[]) =>
       groupPeople(authorPages, groups),
     peopleGroups,
     publicationParams: () => paramsFor(publications, locale),

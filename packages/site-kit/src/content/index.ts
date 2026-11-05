@@ -29,7 +29,6 @@ export type {
   EventFrontmatter,
   FundingFrontmatter,
   PageFrontmatter,
-  PageSection,
   PublicationFrontmatter,
 } from './schema.ts'
 export { peopleGroups } from './sort.ts'

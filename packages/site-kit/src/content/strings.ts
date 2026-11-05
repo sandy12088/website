@@ -1,4 +1,5 @@
 import type { Locale } from '../site/types.ts'
+import type { UserGroup } from './schema.ts'
 
 /**
  * Localized UI strings.
@@ -30,7 +31,7 @@ export interface UiStrings {
   /** Heading for the talks archive, which has no authored page front matter. */
   events: string
   /** Group identifiers stay stable in content; only their headings are translated. */
-  peopleGroups: Record<string, string>
+  peopleGroups: Record<UserGroup, string>
   /** Accessible label and legend for the hero's thermodynamic diagram. */
   heroDiagram: {
     finiteTime: string
@@ -90,7 +91,19 @@ const EN: UiStrings = {
   abstract: 'Abstract',
   awards: 'Awards',
   events: 'Talks & events',
-  peopleGroups: {},
+  peopleGroups: {
+    pi: 'Principal Investigator',
+    faculty: 'Faculty Members',
+    postdoc: 'Postdoctoral Scholars',
+    phd: 'PhD Candidates',
+    grad: 'Graduate Students',
+    bachelor: 'Students',
+    ra: 'Research Assistants',
+    collaborator: 'Collaborators',
+    visiting: 'Visiting Scholars',
+    alumni: 'Alumni',
+    invisible: 'Invisible',
+  },
   heroDiagram: {
     finiteTime: 'Finite-time cycle',
     ideal: 'Ideal Carnot cycle',
@@ -137,15 +150,17 @@ const CN: UiStrings = {
   awards: '荣誉和奖励',
   events: '讲座与活动',
   peopleGroups: {
-    'Principal Investigator': '研究组负责人',
-    'Faculty Members': '教师',
-    'Postdoctoral Scholars': '博士后',
-    'Graduate Students': '研究生',
-    Students: '学生',
-    'Research Assistants': '研究助理',
-    Collaborators: '合作成员',
-    'Visiting Scholars': '访问学者',
-    Alumni: '往届成员',
+    pi: '研究组负责人',
+    faculty: '教师',
+    postdoc: '博士后',
+    phd: '博士研究生',
+    grad: '硕士研究生',
+    bachelor: '学生',
+    ra: '研究助理',
+    collaborator: '合作成员',
+    visiting: '访问学者',
+    alumni: '往届成员',
+    invisible: 'Invisible',
   },
   heroDiagram: {
     finiteTime: '有限时间循环',

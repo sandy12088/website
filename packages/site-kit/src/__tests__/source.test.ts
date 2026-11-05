@@ -1,30 +1,30 @@
-import type { ViteDevServer } from 'vite'
-import type { ContentInput } from '../content/source.ts'
+import type { ViteDevServer } from 'vite';
+import type { ContentInput } from '../content/source.ts';
 
-import assert from 'node:assert/strict'
-import {
-  mkdir,
-  mkdtemp,
-  realpath,
-  rm,
-  symlink,
-  writeFile,
-} from 'node:fs/promises'
-import os from 'node:os'
-import path from 'node:path'
 
-import { defineCollections, defineDocs } from 'fumadocs-mdx/config'
-import { server as contentRuntime } from 'fumadocs-mdx/runtime/server'
-import { fumadocsMdx } from 'fumadocs-mdx/vite'
-import { createElement } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { createServer } from 'vite'
-import { afterAll, beforeAll, expect, it } from 'vitest'
 
-import { contentOverlays } from '../content-overlays.ts'
-import { COLLECTION_GLOBS } from '../content/collections.ts'
-import { schemas } from '../content/schema.ts'
-import { createSource } from '../content/source.ts'
+import assert from 'node:assert/strict';
+import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+
+
+import { defineCollections, defineDocs } from 'fumadocs-mdx/config';
+import { server as contentRuntime } from 'fumadocs-mdx/runtime/server';
+import { fumadocsMdx } from 'fumadocs-mdx/vite';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { createServer } from 'vite';
+import { afterAll, beforeAll, expect, it } from 'vitest';
+
+
+
+import { contentOverlays } from '../content-overlays.ts';
+import { COLLECTION_GLOBS } from '../content/collections.ts';
+import { schemas } from '../content/schema.ts';
+import { createSource } from '../content/source.ts';
+
 
 let root: string
 let vite: ViteDevServer
@@ -36,7 +36,7 @@ title: Yuhan Ma
 first_name: Yuhan
 last_name: Ma
 highlight_name: true
-user_groups: [Principal Investigator]
+user_groups: [pi]
 ---
 Default biography.
 `,
@@ -104,8 +104,8 @@ date: '2026-03-01'
 `,
   'pages/index.md': `---
 title: Home
-design:
-  spacing: 5rem
+header:
+  image: /banner.jpg
 ---
 Default home.
 `,
@@ -239,9 +239,7 @@ it.each(['en', 'zh'] as const)(
     expect(source.findAuthor(['person'])?.data.title).toBe(
       locale === 'zh' ? '马宇翰' : 'Yuhan Ma',
     )
-    expect(source.findAuthor(['person'])?.data.user_groups).toEqual([
-      'Principal Investigator',
-    ])
+    expect(source.findAuthor(['person'])?.data.user_groups).toEqual(['pi'])
     const [author, external] = source.resolveAuthors(
       ['person', 'external-author'],
       ['Corresponding author'],
@@ -284,7 +282,7 @@ it('merges raw fields before validation, inherits bodies and replaces explicit v
   })
   expect(zh.findPage([])?.data).toMatchObject({
     title: '首页',
-    design: { spacing: '5rem' },
+    header: { image: '/banner.jpg', caption: '' },
   })
   expect(zh.hasTranslation('/publication/paper')).toBe(true)
   const empty = zh.findPage(['draw'])

@@ -260,6 +260,8 @@ content/
 
 The home route `/` renders the shared `HomePage` TSX component directly, with
 localized copy in `packages/site-kit/src/views/pages/home.tsx`.
+Page layouts belong to TSX components, not front matter. Content pages supply
+titles, descriptions and MDX bodies; there is no `sections` or `design` schema.
 
 The collection's `files` glob matches default, `.en` and `.zh` files with either
 extension. The i18n `dot` parser only sees files the collection imported.
@@ -269,7 +271,7 @@ The shared Vite content plugin merges the default and the requested language
 **before** schema validation and default values are applied:
 
 - Missing fields inherit from the default. Objects merge recursively; arrays
-  replace as a whole, including a content page's `sections` array.
+  replace as a whole.
 - Explicit `''`, `[]` and `false` override the default. `null` is not a deletion
   instruction; it must be accepted by the field's schema.
 - A nonempty localized body replaces the default body and its table of contents.

@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "katex": "catalog:",
-    "react-aria-components": "catalog:"
+    "react-aria-components": "catalog:",
+    "ts-pattern": "catalog:"
   },
   "devDependencies": {
     "@rolldown/plugin-babel": "catalog:",
