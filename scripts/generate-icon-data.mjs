@@ -39,8 +39,15 @@ const NEEDED = [
   // author profiles (`profiles[].icon`)
   'academicons/arxiv',
   'academicons/google-scholar',
+  'academicons/orcid',
   'academicons/researchgate',
+  'arxiv',
   'at-symbol',
+  'brands/github',
+  'envelope',
+  'google-scholar',
+  'hero/home',
+  'researchgate',
   // hero action
   'sparkles',
   // attachment links (`page_links.html`)
@@ -70,7 +77,13 @@ const NEEDED = [
 function fromSvgLiteral(svg) {
   const viewBox = /viewBox="([^"]+)"/.exec(svg)?.[1] ?? '0 0 24 24'
   const body = svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '')
-  return { body: body.replace(/\s+/g, ' ').trim(), viewBox }
+  const fill = /^<svg\b[^>]*\bfill="([^"]+)"/.exec(svg)?.[1]
+  return {
+    body: (fill ? `<g fill="${fill}">${body}</g>` : body)
+      .replace(/\s+/g, ' ')
+      .trim(),
+    viewBox,
+  }
 }
 
 function readSets() {
@@ -78,10 +91,13 @@ function readSets() {
     readFileSync(path.join(ICON_DIR, 'hero.json'), 'utf8'),
   ).icons
   const blox = parse(readFileSync(path.join(ICON_DIR, 'hb.yaml'), 'utf8')).icons
+  const brands = parse(
+    readFileSync(path.join(ICON_DIR, 'brands.yaml'), 'utf8'),
+  ).icons
   const academicons = JSON.parse(
     readFileSync(path.join(ICON_DIR, 'academicons.json'), 'utf8'),
   ).icons
-  return { academicons, blox, hero }
+  return { academicons, blox, brands, hero }
 }
 
 /** Icons the previous build inlined, harvested from the built HTML. */
@@ -120,7 +136,14 @@ function main() {
     const [prefix, bare] = name.includes('/')
       ? name.split('/', 2)
       : [undefined, name]
-    if (prefix === 'academicons' && sources.academicons[bare]) {
+    if (prefix === 'brands' && sources.brands[bare]) {
+      found[name] = fromSvgLiteral(sources.brands[bare])
+      continue
+    }
+    if (
+      (prefix === 'academicons' || prefix === undefined) &&
+      sources.academicons[bare]
+    ) {
       found[name] = {
         body: sources.academicons[bare].body.replace(/\s+/g, ' ').trim(),
         viewBox: '0 0 512 512',

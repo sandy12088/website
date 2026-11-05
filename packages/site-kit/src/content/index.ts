@@ -1,5 +1,24 @@
-export { authorHref, resolveAuthors } from './authors.ts'
 export type { ResolvedAuthor } from './authors.ts'
+export type { ShareTarget } from './format.ts'
+export type { UserGroup } from './sort.ts'
+export type {
+  AnyPage,
+  AuthorData,
+  AuthorPage,
+  ContentInput,
+  ContentSource,
+  EventData,
+  EventPage,
+  FundingData,
+  FundingPage,
+  PagePage,
+  PublicationData,
+  PublicationPage,
+  StoredPage,
+} from './source.ts'
+export type { UiStrings } from './strings.ts'
+
+export { authorHref, resolveAuthors } from './authors.ts'
 export { normalizeEducation } from './education.ts'
 export {
   formatDate,
@@ -12,7 +31,7 @@ export {
   shareTitle,
   timestamp,
 } from './format.ts'
-export type { ShareTarget } from './format.ts'
+
 export { createSiteI18n } from './i18n.ts'
 export { renderInlineMarkdown } from './inline-markdown.tsx'
 export {
@@ -32,22 +51,5 @@ export type {
   PublicationFrontmatter,
 } from './schema.ts'
 export { peopleGroups } from './sort.ts'
-export type { UserGroup } from './sort.ts'
 export { createSource } from './source.ts'
-export type {
-  AnyPage,
-  AuthorData,
-  AuthorPage,
-  ContentInput,
-  ContentSource,
-  EventData,
-  EventPage,
-  FundingData,
-  FundingPage,
-  PagePage,
-  PublicationData,
-  PublicationPage,
-  StoredPage,
-} from './source.ts'
 export { translate } from './strings.ts'
-export type { UiStrings } from './strings.ts'

@@ -21,6 +21,7 @@ import { authorProfiles, resolveAuthors } from './authors.ts'
 import { createSiteI18n } from './i18n.ts'
 import {
   byDateDesc,
+  byDateStartDesc,
   findBySlugs,
   peopleByGroup as groupPeople,
   peopleGroups,
@@ -268,7 +269,7 @@ export function createSource(
     publicationParams: () => paramsFor(publications, locale),
     resolveAuthors: (ids, notes = []) => resolveAuthors(profiles, ids, notes),
     sortedEvents: () => byDateDesc(eventPages),
-    sortedFundings: () => byDateDesc(fundingPages),
+    sortedFundings: () => byDateStartDesc(fundingPages),
     sortedPublications: () => byDateDesc(publicationPages),
   } satisfies ContentSource
 }

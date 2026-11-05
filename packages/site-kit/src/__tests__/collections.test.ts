@@ -5,8 +5,9 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { ICONS } from '../components/icon-data.ts'
 import { COLLECTION_GLOBS } from '../content/collections.ts'
-import { schemaFor } from '../content/schema.ts'
+import { schemaFor, schemas } from '../content/schema.ts'
 import {
   authorSlugs,
   collectionEntries,
@@ -38,6 +39,22 @@ function validate(family: ContentFamily, data: unknown): string[] {
 
 describe('content model', () => {
   const entries = collectionEntries()
+
+  it('provides icons for every authored profile link', () => {
+    for (const entry of collectionEntries('authors')) {
+      const profiles = schemas.authors.shape.profiles.parse(
+        entry.data['profiles'],
+      )
+      for (const profile of profiles.filter(
+        profile => profile.url.length > 0,
+      )) {
+        expect(
+          ICONS[profile.icon],
+          `${entry.file}: ${profile.icon}`,
+        ).toBeDefined()
+      }
+    }
+  })
 
   it('finds every migrated collection entry', () => {
     expect(entries.length).toBeGreaterThan(0)

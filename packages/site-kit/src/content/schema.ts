@@ -39,12 +39,11 @@ export const USER_GROUPS = [
   'postdoc',
   'phd',
   'grad',
-  'bachelor',
+  'undergrad',
   'ra',
   'collaborator',
   'visiting',
   'alumni',
-  'invisible',
 ] as const
 export const UserGroup = z.enum(USER_GROUPS)
 export type UserGroup = z.infer<typeof UserGroup>
@@ -62,16 +61,6 @@ const urlFields = {
 
 const imageDefaults = { caption: '', focal_point: '', preview_only: false }
 
-const mediaFields = {
-  image: z
-    .object({
-      caption: z.string().default(''),
-      focal_point: z.string().default(''),
-      preview_only: z.boolean().default(false),
-    })
-    .default(imageDefaults),
-} as const
-
 /**
  * Attachments. Some entries carry only an `icon` (rendered from the `icon_pack`
  * icon set) and some only a `name`/`url` pair, so all four fields stay optional.
@@ -85,8 +74,6 @@ const linkSchema = z.object({
 
 const publicationSchema = pageSchema.extend({
   ...urlFields,
-  ...mediaFields,
-
   abstract: z.string().default(''),
   author_notes: z.array(z.string()).default([]),
   authors: z.array(z.string()).default([]),
@@ -108,20 +95,18 @@ const publicationSchema = pageSchema.extend({
 
 const fundingSchema = pageSchema.extend({
   ...urlFields,
-  ...mediaFields,
-
-  date: z.string(),
-  dateEnd: z.string().optional(),
+  date_start: z.string(),
+  date_end: z.string().optional(),
   external_link: z.string().default(''),
   slides: z.string().default(''),
-  summary: z.string().default(''),
+  program: z.string().default(''),
+  role: z.enum(['host', 'participant']).default('host'),
+  status: z.enum(['ongoing', 'completed']).default('ongoing'),
   tags: z.array(z.string()).default([]),
 })
 
 const eventSchema = pageSchema.extend({
   ...urlFields,
-  ...mediaFields,
-
   abstract: z.string().default(''),
   address: z
     .object({
@@ -163,7 +148,7 @@ const awardSchema = z.object({
   url: z.string().default(''),
 })
 
-const lifeStageSchema = z.object({
+export const LifeStage = z.object({
   area: z.string().optional(),
   button: z.object({ text: z.string(), url: z.string() }).optional(),
   company_logo: z.string().optional(),
@@ -181,6 +166,7 @@ const lifeStageSchema = z.object({
   title: z.string().optional(),
   year: z.string().optional(),
 })
+export type LifeStage = z.infer<typeof LifeStage>
 
 const profileSchema = z.object({
   icon: z.string(),
@@ -194,7 +180,7 @@ const authorSchema = pageSchema.extend({
   title: z.string().default(''),
   awards: z.array(awardSchema).default([]),
   bio: z.string().default(''),
-  education: z.preprocess(v => v ?? [], z.array(lifeStageSchema)),
+  education: z.preprocess(v => v ?? [], z.array(LifeStage)),
   email: z.string().default(''),
   first_name: z.string().default(''),
   highlight_name: z.boolean().default(false),
@@ -207,12 +193,12 @@ const authorSchema = pageSchema.extend({
   social: z.array(profileSchema).default([]),
   status: z
     .object({
-      icon: z.string().default(''),
+      icon: z.string(),
     })
     .optional(),
   superuser: z.boolean().default(false),
-  user_groups: z.array(UserGroup).default(['invisible']),
-  work: z.array(lifeStageSchema).default([]),
+  user_groups: z.array(UserGroup).default([]).optional(),
+  work: z.array(LifeStage).default([]),
 })
 
 const pageContentSchema = pageSchema.extend({

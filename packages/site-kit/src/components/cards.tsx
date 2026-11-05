@@ -17,7 +17,7 @@ import { card as cardStyles, detail } from './views.stylex.ts'
 export function FundingCard({ page }: { page: FundingPage }) {
   const external = page.data.external_link.length > 0
   const href = external ? page.data.external_link : page.url
-  const summary = page.data.summary
+  const program = page.data.program
 
   return (
     <a
@@ -26,13 +26,15 @@ export function FundingCard({ page }: { page: FundingPage }) {
       {...stylex.props(cardStyles.item)}
     >
       <span {...stylex.props(cardStyles.title)}>{page.data.title}</span>
-      {summary.length > 0 ? (
-        <p {...stylex.props(cardStyles.summary)}>
-          <MathText text={summary} />
+      {program.length > 0 ? (
+        <p {...stylex.props(cardStyles.program)}>
+          <MathText text={program} />
         </p>
       ) : null}
       <p {...stylex.props(cardStyles.meta)}>
-        <time dateTime={page.data.date}>{formatDate(page.data.date)}</time>
+        <time dateTime={page.data.date_start}>
+          {formatDate(page.data.date_start)}
+        </time>
       </p>
     </a>
   )

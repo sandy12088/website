@@ -1,4 +1,4 @@
-import type { ExperienceEntry } from './bio-text.ts'
+import type { LifeStage } from '../content/schema.ts'
 
 import * as stylex from '@stylexjs/stylex'
 
@@ -14,7 +14,7 @@ import { styles } from './biography.stylex.ts'
 export interface ExperienceListProps {
   /** `i18n "experience"` / `i18n "education"`. */
   heading: string
-  entries: readonly ExperienceEntry[]
+  entries: LifeStage[]
   /** Localized `Present`, used when an entry has no end date. */
   presentLabel: string
 }
@@ -57,9 +57,9 @@ export function ExperienceList({
                     {entrySubtitle(entry)}
                   </p>
                 ) : null}
-                {entry.summary ? (
+                {entry.supervisor ? (
                   <div {...stylex.props(styles.timelineSummary)}>
-                    {renderInlineMarkdown(entry.summary)}
+                    {renderInlineMarkdown(entry.supervisor)}
                   </div>
                 ) : null}
               </div>

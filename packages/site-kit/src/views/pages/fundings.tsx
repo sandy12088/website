@@ -51,7 +51,9 @@ export function FundingsDetail({ slugs = [] }: { slugs?: string[] }) {
         <h1 {...stylex.props(shared.title)}>{page.data.title}</h1>
         <div {...stylex.props(shared.meta)}>
           <div {...stylex.props(shared.metaInline)}>
-            <time dateTime={page.data.date}>{formatDate(page.data.date)}</time>
+            <time dateTime={page.data.date_start}>
+              {formatDate(page.data.date_start)}
+            </time>
           </div>
         </div>
         <div {...stylex.props(shared.actions)}>
@@ -65,9 +67,9 @@ export function FundingsDetail({ slugs = [] }: { slugs?: string[] }) {
       </header>
 
       <div {...stylex.props(shared.reading)}>
-        {page.data.summary.length > 0 ? (
+        {page.data.program.length > 0 ? (
           <DetailRow label={labels.summary}>
-            <MathText text={page.data.summary} />
+            <MathText text={page.data.program} />
           </DetailRow>
         ) : null}
         <div {...stylex.props(shared.body)}>

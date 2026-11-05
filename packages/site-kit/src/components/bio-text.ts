@@ -6,35 +6,20 @@
  * by `cpSun`. Both collapse to a title, a subtitle and a year range.
  */
 
+import type { LifeStage } from '../content/schema.ts'
+
 import { formatShortMonthYear } from '../content/format.ts'
 
-export interface ExperienceEntry {
-  area?: string | undefined
-  button?: { text: string; url: string } | undefined
-  company_logo?: string | undefined
-  company_name?: string | undefined
-  company_url?: string | undefined
-  course?: string | undefined
-  date_end?: string | undefined
-  date_start?: string | undefined
-  description?: string | undefined
-  institution?: string | undefined
-  position?: string | undefined
-  summary?: string | undefined
-  title?: string | undefined
-  year?: string | undefined
-}
-
-export function entryTitle(entry: ExperienceEntry): string {
+export function entryTitle(entry: LifeStage): string {
   return entry.position ?? entry.area ?? entry.title ?? entry.course ?? ''
 }
 
-export function entrySubtitle(entry: ExperienceEntry): string {
+export function entrySubtitle(entry: LifeStage): string {
   return entry.company_name ?? entry.institution ?? ''
 }
 
 /** `2015-09-01` + `2020-06-01`, or the legacy free-form `year` field. */
-export function entryYears(entry: ExperienceEntry): string[] {
+export function entryYears(entry: LifeStage): string[] {
   if (entry.year !== undefined && entry.year.length > 0) return [entry.year]
   return [entry.date_start, entry.date_end].filter(
     (value): value is string => typeof value === 'string' && value.length > 0,

@@ -36,7 +36,8 @@ profiles:
   - icon: google-scholar
     icon_pack: ai
     url: https://scholar.google.com/citations?user=FkPp4D4AAAAJ&hl=en
-  - icon: research group website
+  - icon: hero/home
+    label: 课题组网站
     url: http://suncp.gscaep.ac.cn/
 ---
 

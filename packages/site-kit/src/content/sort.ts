@@ -41,6 +41,14 @@ export function byDateDesc<T extends { data: { date?: string } }>(
   )
 }
 
+export function byDateStartDesc<T extends { data: { date_start?: string } }>(
+  items: readonly T[],
+): T[] {
+  return items.toSorted(
+    (a, b) => timestamp(b.data.date_start) - timestamp(a.data.date_start),
+  )
+}
+
 /** People grouped for the "Meet the incredible team" block, in declaration order. */
 export function peopleByGroup(
   pages: readonly AuthorPage[],

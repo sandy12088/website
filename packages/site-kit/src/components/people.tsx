@@ -18,7 +18,7 @@ export interface PeopleGridProps {
   /** `content.text`, already parsed. */
   intro?: ReactNode
   /** `content.user_groups`; only groups with members are rendered. */
-  groups: readonly Exclude<UserGroup, 'invisible'>[]
+  groups: UserGroup[]
   showRole: boolean
   showSocial: boolean
   showInterests: boolean
@@ -242,32 +242,19 @@ function statusEmoji(value: string): string {
   return STATUS_EMOJI[value] ?? ''
 }
 
-/**
- * Hugo resolved `*avatar*` inside the content bundle and served a resized WebP.
- * The migrated bundles are copied verbatim, so the avatar is referenced by name.
- */
-const AVATARS: Record<string, string> = {
-  congfu: 'avatar.jpg',
-  cpsun: 'avatar.png',
-  erichen: 'avatar.jpg',
-  hdong: 'avatar.jpg',
-  htquan: 'avatar.jpg',
-  hua: 'avatar.jpg',
-  jfchen: 'avatar.jpg',
-  jrlei: 'avatar.jpg',
-  lqhuang: 'avatar.jpg',
-  lynn: 'avatar.jpg',
-  sandy: 'avatar.jpg',
-  shiling: 'avatar.jpg',
-  sushanhe: 'avatar.png',
-  tuzc: 'avatar.jpg',
-  yhma: 'avatar.jpg',
-}
+/** Discover portraits from content bundles so new members need no code changes. */
+const AVATARS = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<string>(
+      '../../../../content/authors/*/avatar.{jpg,jpeg,png,webp,gif,svg}',
+      { eager: true, import: 'default', query: '?url' },
+    ),
+  ).map(([file, url]) => [file.split('/').at(-2) ?? '', url] as const),
+)
 
 function avatarFor(slug: string | undefined): string {
   if (slug === undefined) return ''
-  const file = AVATARS[slug]
-  return file === undefined ? '' : `/authors/${slug}/${file}`
+  return AVATARS[slug] ?? ''
 }
 
 export { avatarFor }

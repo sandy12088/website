@@ -227,7 +227,7 @@ export const card = stylex.create({
     fontVariantNumeric: 'tabular-nums',
     marginBlock: 0,
   },
-  summary: {
+  program: {
     color: {
       default: theme.fgMuted,
       [stylex.when.ancestor(DARK)]: '#a9b4ba',
