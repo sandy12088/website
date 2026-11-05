@@ -4,9 +4,11 @@ import assert from 'node:assert/strict'
 
 import { chromium } from 'playwright'
 
+// Set DEV_HOST to a LAN IP to cover HTTP origins without native randomUUID.
+const host = process.env['DEV_HOST'] || 'localhost'
 const sites = [
   {
-    origin: 'http://localhost:3000',
+    origin: `http://${host}:3000`,
     other: 'https://magroup.ac.cn',
     title: 'Yuhan Ma',
     open: 'Open navigation',
@@ -15,7 +17,7 @@ const sites = [
     light: 'Switch to light appearance',
   },
   {
-    origin: 'http://localhost:3001',
+    origin: `http://${host}:3001`,
     other: 'https://yhmayyds.group',
     title: '马宇翰研究组',
     open: '展开导航',

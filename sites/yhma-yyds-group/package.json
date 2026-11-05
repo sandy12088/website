@@ -12,7 +12,7 @@
   "scripts": {
     "build": "waku build",
     "content:codegen": "fumadocs-mdx",
-    "dev": "waku dev --port 3000",
+    "dev": "waku dev --host 0.0.0.0 --port 3000",
     "start": "waku start",
     "typecheck": "tsc --noEmit",
     "typegen": "fumadocs-mdx"

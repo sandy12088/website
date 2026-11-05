@@ -71,7 +71,7 @@ const styles = stylex.create({
     fontSize: TEXT.small,
     lineHeight: 1.6,
     marginBlock: 0,
-    maxWidth: '58ch',
+    maxWidth: 'fit-content',
   },
   row: {
     alignItems: 'flex-end',
@@ -85,13 +85,22 @@ const styles = stylex.create({
     alignItems: 'flex-start',
     display: 'flex',
     flexDirection: 'column',
-    rowGap: '0.625rem',
+    rowGap: '0.8rem',
   },
   sideEnd: {
     alignItems: 'flex-end',
     display: 'flex',
     flexDirection: 'column',
-    rowGap: '0.625rem',
+    rowGap: '0.8rem',
+  },
+  beian: {
+    color: theme.fgMuted,
+    display: 'flex',
+    flexWrap: 'wrap',
+    fontSize: TEXT.micro,
+    gap: '0.3rem',
+    fontFamily: FONT_SANS.family,
+    textDecorationLine: 'none',
   },
   toTop: {
     alignItems: 'center',
@@ -157,6 +166,21 @@ export function Footer() {
               </a>
               {fill(after)}
             </p>
+            {locale === 'zh' && (
+              <nav aria-label="beian">
+                <a
+                  href="https://beian.miit.gov.cn/"
+                  {...stylex.props(styles.beian)}
+                >
+                  <img
+                    width="20"
+                    height="20"
+                    src="https://qcloudimg.tencent-cloud.cn/raw/eed02831a0e201b8d794c8282c40cf2e.png"
+                  />
+                  闽ICP备2024081965号-2
+                </a>
+              </nav>
+            )}
           </div>
           <div {...stylex.props(styles.sideEnd)}>
             <a

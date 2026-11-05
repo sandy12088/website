@@ -5,15 +5,15 @@
  * Hugo and fumadocs disagree on three things:
  *
  *  1. file naming: Hugo uses `_index.md` for a section index and `.zh.md` for a
- *     translation; fumadocs uses `index.mdx` and `.cn.mdx` with `parser: 'dot'`.
+ *     translation; the new content tree uses `index.mdx` and `index.zh.md`.
  *     The collection globs in `packages/site-kit/src/content/collections.ts` must
  *     match both names, or a translation is never imported.
  *  2. front matter: Hugo carries several keys that only Hugo understands
  *     (`build`, `cascade`, `headless`, `widget`, `active`, `weight`,
  *     `type: landing`). They are dropped here; `source.config.ts` rejects
  *     anything it does not know about, so nothing else can slip through.
- *  3. assets: Hugo resolves images and attachments relative to the content
- *     bundle; the web app serves them from `public/`.
+ *  3. assets: author images and publication attachments stay in their content
+ *     bundles; the shared build publishes them at content-relative URLs.
  *
  * Run without arguments for a dry run, or with `--write` to modify the tree.
  *
@@ -134,20 +134,20 @@ function buildFrontMatter(data) {
  * Map a Hugo bundle file name onto its fumadocs-mdx name.
  *
  * `_index.md` is the bundle's own page, so it becomes the collection entry
- * `index.mdx`; `_index.zh.md` becomes its translation `index.cn.mdx`. Any other
+ * `index.mdx`; `_index.zh.md` becomes its translation `index.zh.md`. Any other
  * file (`_info.zh.md`, `parttime.md`) is page *content* that Hugo appended to
  * whatever widget asked for it, so it keeps its own name and locale suffix
  * instead of clobbering the entry.
  */
 function targetFileFor(name) {
-  const locale = /\.zh\.mdx?$/.test(name) ? 'cn' : 'en'
+  const locale = /\.zh\.mdx?$/.test(name) ? 'zh' : 'en'
   const bare = name.replace(/\.zh\.mdx?$/, '').replace(/\.mdx?$/, '')
   const isEntry = bare === '_index'
   if (isEntry)
-    return { isEntry, name: locale === 'cn' ? 'index.cn.mdx' : 'index.mdx' }
+    return { isEntry, name: locale === 'zh' ? 'index.zh.md' : 'index.mdx' }
   return {
     isEntry,
-    name: `${bare.replace(/^_/, '')}${locale === 'cn' ? '.cn' : ''}.mdx`,
+    name: `${bare.replace(/^_/, '')}${locale === 'zh' ? '.zh.md' : '.mdx'}`,
   }
 }
 
@@ -159,6 +159,8 @@ async function convertBundle({ dir, family }) {
   const markdown = []
   const assets = []
   const written = new Set()
+  const converted = new Map()
+  const chineseFields = {}
 
   for (const entry of files) {
     if (entry.isDirectory()) {
@@ -210,13 +212,31 @@ async function convertBundle({ dir, family }) {
       }
     }
 
-    if (family.startsWith('publications') && data['titel_zh'] !== undefined) {
-      report.warnings.push(`${slug}: renamed typo key 'titel_zh' -> 'title_zh'`)
-      data['title_zh'] = data['titel_zh']
+    if (isEntry && targetName === 'index.mdx') {
+      for (const field of ['title', 'abstract', 'summary']) {
+        const translated =
+          data[`${field}_zh`] ??
+          (field === 'title' ? data['titel_zh'] : undefined)
+        if (translated !== undefined) chineseFields[field] = translated
+        delete data[`${field}_zh`]
+      }
       delete data['titel_zh']
     }
 
-    const frontMatter = buildFrontMatter(data)
+    converted.set(targetName, { frontMatter: buildFrontMatter(data), body })
+  }
+
+  if (Object.keys(chineseFields).length > 0) {
+    const chinese = converted.get('index.zh.md') ?? {
+      frontMatter: {},
+      body: '',
+    }
+    converted.set('index.zh.md', {
+      ...chinese,
+      frontMatter: { ...chineseFields, ...chinese.frontMatter },
+    })
+  }
+  for (const [targetName, { frontMatter, body }] of converted) {
     const markdownOut = `---\n${stringify(frontMatter, { lineWidth: 0 }).trimEnd()}\n---\n\n${body.replace(/^\n+/, '')}`
 
     await emit(path.join(targetDir, targetName), markdownOut)
@@ -239,7 +259,7 @@ async function emit(file, contents) {
 async function copyAsset(from, to) {
   if (!WRITE) return
   await mkdir(path.dirname(to), { recursive: true })
-  await cp(from, to)
+  if (from !== to) await cp(from, to)
   report.assets++
 }
 
@@ -273,7 +293,7 @@ async function main() {
       if (IMAGE_EXTENSIONS.has(extension)) {
         await copyAsset(
           path.join(dir, asset),
-          path.join(PUBLIC, 'authors', slug, asset),
+          path.join(OUT, 'authors', slug, asset),
         )
       }
     }
@@ -297,7 +317,7 @@ async function main() {
         for (const asset of assets) {
           await copyAsset(
             path.join(nestedDir, asset),
-            path.join(PUBLIC, family, slug, asset),
+            path.join(OUT, family, slug, asset),
           )
         }
       }
@@ -313,7 +333,7 @@ async function main() {
     for (const asset of assets) {
       await copyAsset(
         path.join(dir, asset),
-        path.join(PUBLIC, 'publications', slug, asset),
+        path.join(OUT, 'publications', slug, asset),
       )
     }
   }

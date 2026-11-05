@@ -113,7 +113,7 @@ const EN: UiStrings = {
   education: 'Education',
   experience: 'Experience',
   footerNotice:
-    '{title} © {year}. This site is licensed under {license}. Build with ❤️',
+    '{title} ©️ {year}. This site is licensed under {license}. Build with ❤️',
   interests: 'Interests',
   notFoundBody: 'The page you are looking for does not exist.',
   notFoundHome: 'Back home',
@@ -168,7 +168,7 @@ const CN: UiStrings = {
   education: '教育经历',
   experience: '工作经历',
   footerNotice:
-    '{title} © {year}. 本站内容采用 {license} 许可协议。Build with ❤️',
+    '{title} ©️ {year}. 本站内容采用 {license} 许可协议。Build with ❤️',
   interests: '研究兴趣',
   notFoundBody: '你访问的页面不存在。',
   notFoundHome: '返回首页',
