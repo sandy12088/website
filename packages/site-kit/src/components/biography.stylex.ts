@@ -180,6 +180,10 @@ export const styles = stylex.create({
     alignItems: 'flex-start',
     display: 'flex',
     flexDirection: 'column',
+    '@media (max-width: 767px)': {
+      alignItems: 'center',
+      textAlign: 'center',
+    },
   },
   profileList: {
     alignItems: 'center',
@@ -189,6 +193,9 @@ export const styles = stylex.create({
     marginBlock: '1.125rem 0',
     marginInlineStart: '-0.4375rem',
     paddingInline: 0,
+    '@media (max-width: 767px)': {
+      marginInlineStart: 0,
+    },
   },
   profileSticky: {
     '@media (min-width: 1024px)': {

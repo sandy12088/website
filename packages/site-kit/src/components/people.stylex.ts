@@ -108,6 +108,10 @@ export const styles = stylex.create({
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(14rem, 1fr))',
     rowGap: '2.5rem',
+    '@media (max-width: 767px)': {
+      columnGap: '1rem',
+      gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    },
   },
   interests: {
     color: {
@@ -149,15 +153,30 @@ export const styles = stylex.create({
     flexDirection: 'column',
     gap: '0.875rem',
     minWidth: 0,
+    '@media (max-width: 767px)': {
+      alignItems: 'center',
+      textAlign: 'center',
+      ':only-child': {
+        gridColumn: '1 / -1',
+      },
+    },
   },
   personInfo: {
     display: 'flex',
     flexDirection: 'column',
     gap: '0.25rem',
     minWidth: 0,
+    '@media (max-width: 767px)': {
+      alignItems: 'center',
+      maxWidth: '100%',
+      overflowWrap: 'anywhere',
+    },
   },
   personName: {
     alignSelf: 'flex-start',
+    '@media (max-width: 767px)': {
+      alignSelf: 'center',
+    },
     textDecorationColor: {
       default: theme.accent,
       [stylex.when.ancestor(DARK)]: '#82a6ff',
@@ -212,6 +231,11 @@ export const styles = stylex.create({
     marginBlock: '0.125rem 0',
     marginInlineStart: '-0.3125rem',
     paddingInline: 0,
+    '@media (max-width: 767px)': {
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      marginInlineStart: 0,
+    },
   },
   statusBadge: {
     backgroundColor: {
