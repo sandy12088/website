@@ -7,7 +7,7 @@ import { resolveInternal } from './links.ts'
 
 const DARK = '[data-theme="dark"]'
 
-const styles = stylex.create({
+export const styles = stylex.create({
   code: {
     backgroundColor: {
       default: theme.bgSubtle,
@@ -29,7 +29,7 @@ const styles = stylex.create({
       default: theme.accent,
       [stylex.when.ancestor(DARK)]: '#82a6ff',
     },
-    textDecorationLine: 'underline',
+    textDecorationLine: 'none',
     textUnderlineOffset: 2,
     ':focus-visible': {
       borderRadius: RADIUS.sm,

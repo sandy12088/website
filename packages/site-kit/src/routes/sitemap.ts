@@ -20,7 +20,10 @@ import { absoluteUrl, alternateUrl } from '../content/links.ts'
  * written to `dist/public/sitemap.xml` at build time.
  */
 
-type Entry = { loc: string; lastmod: string }
+interface Entry {
+  loc: string
+  lastmod: string
+}
 
 function entries(source: ContentSource): Entry[] {
   const out: Entry[] = [{ lastmod: '', loc: '/' }]
@@ -32,7 +35,7 @@ function entries(source: ContentSource): Entry[] {
     out.push({ lastmod: page.data.date, loc: page.url })
   }
   for (const page of source.allFundings()) {
-    out.push({ lastmod: page.data.date, loc: page.url })
+    out.push({ lastmod: page.data.date_start, loc: page.url })
   }
   for (const page of source.allAuthors()) {
     out.push({ lastmod: '', loc: page.url })

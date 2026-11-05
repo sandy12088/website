@@ -4,9 +4,9 @@ first_name: 宇翰
 last_name: 马
 role: 副教授
 organizations:
-  - name: 北京师范大学
+  - name: 北京师范大学 物理与天文学院
     url: https://www.bnu.edu.cn/
-  - name: 北京师范大学多尺度自旋物理重点实验室
+  - name: 北京师范大学 多尺度自旋物理重点实验室
     url: https://multiscale.bnu.edu.cn/jj/index.htm/
 bio: 物理
 interests:

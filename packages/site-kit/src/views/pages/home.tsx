@@ -11,7 +11,7 @@ import {
   ProfileFacts,
 } from '../../components/resume.tsx'
 import { normalizeEducation } from '../../content/education.ts'
-import { renderInlineMarkdown } from '../../content/inline-markdown.tsx'
+import { styles as inlineMarkdownStyles } from '../../content/inline-markdown.tsx'
 import { resolveInternal } from '../../content/links.ts'
 import { translate } from '../../content/strings.ts'
 import { siteContext } from '../../site-context.ts'
@@ -39,7 +39,14 @@ const copy = {
     featured: '精选论文',
     director: '研究组负责人',
     people: '研究组成员',
-    peopleSubtitle: '完整名单请见**[成员页面](/people/)**。',
+    peopleSubtitle: (
+      <span>
+        完整名单请见
+        <a href="/people/" {...stylex.props(inlineMarkdownStyles.link)}>
+          成员页面
+        </a>
+      </span>
+    ),
   },
 }
 
@@ -106,12 +113,12 @@ export function HomePage() {
       </section>
       <section {...stylex.props(blockStyles.section)}>
         <PeopleGrid
-          groups={['pi', 'faculty', 'postdoc', 'grad', 'undergrad']}
+          groups={['pi', 'faculty', 'phd', 'grad', 'undergrad']}
           showInterests={false}
           showOrganizations={false}
           showRole
           showSocial
-          subtitle={renderInlineMarkdown(text.peopleSubtitle)}
+          subtitle={text.peopleSubtitle}
           title={text.people}
         />
       </section>

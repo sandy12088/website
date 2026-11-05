@@ -17,7 +17,12 @@ import { absoluteUrl } from '../content/links.ts'
  * the response is written to `dist/public/index.xml` at build time.
  */
 
-type Item = { date: string; description: string; link: string; title: string }
+interface Item {
+  date: string
+  description: string
+  link: string
+  title: string
+}
 
 function items(source: ContentSource): Item[] {
   const publications = source.sortedPublications().map(page => ({
@@ -27,8 +32,8 @@ function items(source: ContentSource): Item[] {
     title: page.data.title,
   }))
   const fundings = source.sortedFundings().map(page => ({
-    date: page.data.date,
-    description: page.data.summary,
+    date: page.data.date_start,
+    description: page.data.description ?? '',
     link: page.url,
     title: page.data.title,
   }))

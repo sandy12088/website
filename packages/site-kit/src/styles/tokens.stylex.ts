@@ -40,15 +40,15 @@ export const themeMarker = stylex.defaultMarker()
  *
  * | token         | light     | dark      |
  * | ------------- | --------- | --------- |
- * | background    | `#f4f5f3` | `#0c1116` |
- * | raised        | `#fbfcfa` | `#141b22` |
+ * | background    | `#fffefa` | `#0c1116` |
+ * | raised        | `#fffefa` | `#141b22` |
  * | subtle        | `#ecefea` | `#172028` |
  * | text          | `#171b1e` | `#e9eeec` |
  * | text muted    | `#4a545a` | `#a9b4ba` |
  * | text subtle   | `#667175` | `#7f8b92` |
  * | border        | `#dde1db` | `#232d35` |
  * | border strong | `#c9cfc8` | `#34424c` |
- * | accent        | `#1d4ed8` | `#82a6ff` |
+ * | accent        | `#1744f5` | `#82a6ff` |
  * | accent hover  | `#1a44bf` | `#a0baff` |
  * | on accent     | `#ffffff` | `#0a1018` |
  * | accent soft   | `#e7ecfb` | `#18233d` |
@@ -189,12 +189,12 @@ export const MOTION = defineConsts({
  * written as an inline pair at its call site.
  */
 export const theme = defineVars({
-  accent: '#1d4ed8',
+  accent: '#1744f5',
   accentHover: '#1a44bf',
   accentFg: '#ffffff',
   accentSoft: '#e7ecfb',
-  bg: '#f4f5f3',
-  bgRaised: '#fbfcfa',
+  bg: '#fffefa',
+  bgRaised: '#fffefa',
   bgSubtle: '#ecefea',
   border: '#dde1db',
   borderStrong: '#c9cfc8',
