@@ -3,6 +3,8 @@ title: Shiling Liang
 first_name: Shiling
 last_name: Liang
 role: ELBE Postdoc Fellow
+# user_groups:
+#   - collaborator
 organizations:
   - name: CSBD | MPI-PKS | MPI-CBG
     url: https://shilingliang.com/

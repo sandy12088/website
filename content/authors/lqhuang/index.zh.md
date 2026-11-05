@@ -1,4 +1,5 @@
 ---
+title: 黄岚青
 role: 顾问
 bio: 无名之辈
 interests:
@@ -9,11 +10,11 @@ education:
   - area: 物理学硕士
     institution: 北京计算科学研究中心
     date_start: 2015-09-01
-    date_end: 2018-06-60
+    date_end: 2018-06-30
   - area: 物理学学士
     institution: 北京师范大学
     date_start: 2011-09-01
-    date_end: 2015-06-60
+    date_end: 2015-06-30
 profiles:
   - icon: at-symbol
     url: mailto:lqhuang@typef.io

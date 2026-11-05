@@ -25,7 +25,8 @@ education:
 中文介绍待补充。
 
 论文：
-[1]Rényi entanglement asymmetry in (1+1)-dimensional conformal field theories, https://journals.aps.org/prd/abstract/10.1103/PhysRevD.109.065009
-[2]Finite-time and Finite-size scalings of coercivity in dynamic hysteresis, Miao Chen, Xiu-Hua Zhao, Yu-Han Ma, https://arxiv.org/abs/2507.07933
-[3]Coercivity Panorama of Dynamic Hysteresis, Miao Chen, Xiu-Hua Zhao, Yu-Han Ma, https://arxiv.org/abs/2506.24035v1
-[4]陈苗,郭琴.络纱问题理论研究及可视化[J].大学物理,2024,43(04):65-68+80.DOI:10.16854/j.cnki.1000-0712.230114.
+
+1. Rényi entanglement asymmetry in (1+1)-dimensional conformal field theories, Miao Chen* and Hui-Huang Chen, https://journals.aps.org/prd/abstract/10.1103/PhysRevD.109.065009
+2. Finite-time and Finite-size scalings of coercivity in dynamic hysteresis, Miao Chen*, Xiu-Hua Zhao, Yu-Han Ma, https://arxiv.org/abs/2507.07933
+3. Coercivity Panorama of Dynamic Hysteresis, Miao Chen, Xiu-Hua Zhao, Yu-Han Ma, https://arxiv.org/abs/2506.24035v1
+4. 陈苗, 郭琴. 络纱问题理论研究及可视化 \[J\].大学物理,2024,43(04):65-68+80.DOI:10.16854/j.cnki.1000-0712.230114.

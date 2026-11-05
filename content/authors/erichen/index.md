@@ -4,14 +4,13 @@ first_name: Wanyan
 last_name: Chen
 role: Grad Student
 user_groups:
-  - Graduate Students
+  - grad
 email: wanyanchen0304@mail.bnu.edu.cn
 organizations:
   - name: School of Physics and Astronomy, Beijing Normal University
     url: https://physics.bnu.edu.cn/
   - name: Key Laboratory of Multiscale Spin Physics, Beijing Normal University
     url: https://multiscale.bnu.edu.cn/jj/index.htm/
-superuser: true
 bio: Physics
 highlight_name: true
 interests:

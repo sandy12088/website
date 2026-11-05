@@ -3,8 +3,8 @@ title: 有限相变热源中的反常传热过程研究
 program: 北京师范大学青年教师基金
 role: host
 status: completed
-date: 2023-10-01
-dateEnd: 2025-09-01
+date_start: 2023-10-01
+date_end: 2025-09-01
 external_link: ''
 image:
   caption: Photo by rawpixel on Unsplash

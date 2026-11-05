@@ -23,6 +23,6 @@ education:
 
 论文
 
-1. J. R. Lei, Y. Q. Lin, S. G. Ou, Y. H. Ma. Universal power-efficiency trade-off in battery charging[J]. Frontiers of Physics, 2025, 20(4): 042202.;
-2. 林蕴芊,雷家睿,马宇翰.黏性液膜在水平旋转柱体外的稳态行为[J].大学物理,2024,43(05):55-59.DOI:10.16854/j.cnki.1000-0712.230270.
-3. 李佳泓, 林蕴芊, 赵芸赫等. 撒克逊碗的下沉临界条件与沉没时间[J]. 物理与工程, 2023, 33(01):107-114.
+1. J. R. Lei, Y. Q. Lin, S. G. Ou, Y. H. Ma. Universal power-efficiency trade-off in battery charging \[J\]. Frontiers of Physics, 2025, 20(4):042202.
+2. 林蕴芊, 雷家睿, 马宇翰.黏性液膜在水平旋转柱体外的稳态行为 \[J\].大学物理, 2024, 43(05):55-59. DOI:10.16854/j.cnki.1000-0712.230270.
+3. 李佳泓, 林蕴芊, 赵芸赫等. 撒克逊碗的下沉临界条件与沉没时间 \[J\]. 物理与工程, 2023, 33(01):107-114.

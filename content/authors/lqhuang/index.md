@@ -7,7 +7,7 @@ status:
   icon: ':coffee:'
 role: Advisor
 user_groups:
-  - Collaborators
+  - collaborator
 organizations:
   - name: TypeF LLC
     url: https://typef.io/
@@ -22,11 +22,11 @@ education:
   - area: M.Sc. in Physics
     institution: Beijing Computational Science Research Center
     date_start: 2015-09-01
-    date_end: 2018-06-60
+    date_end: 2018-06-30
   - area: B.Sc. in Physics
     institution: Beijing Normal University
     date_start: 2011-09-01
-    date_end: 2015-06-60
+    date_end: 2015-06-30
 profiles:
   - icon: at-symbol
     url: mailto:lqhuang@typef.io
