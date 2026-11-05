@@ -15,7 +15,7 @@ education:
     institution: 北京师范大学
     date_start: 2024-09-01
     date_end: ''
-    summary: '导师：马宇翰副教授'
+    supervisor: '马宇翰副教授'
   - area: 物理学学士
     institution: 江西师范大学物理与通信电子学院物理学本科
     date_start: 2020-09-01

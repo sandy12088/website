@@ -14,8 +14,7 @@ education:
   - area: 理论物理博士
     institution: 北京师范大学
     date_start: 2025-09-01
-    date_end: ''
-    summary: '导师：涂展春教授、马宇翰副教授'
+    supervisor: '涂展春教授、马宇翰副教授'
   - area: 物理学学士
     institution: 北京师范大学
     date_start: 2021-09-01

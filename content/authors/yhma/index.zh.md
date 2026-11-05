@@ -6,6 +6,8 @@ role: 副教授
 organizations:
   - name: 北京师范大学
     url: https://www.bnu.edu.cn/
+  - name: 北京师范大学多尺度自旋物理重点实验室
+    url: https://multiscale.bnu.edu.cn/jj/index.htm/
 bio: 物理
 interests:
   - 量子热力学
@@ -86,13 +88,8 @@ profiles:
 ## 学术兼职：
 
 1. 担任 Phys. Rev. Lett., Phys.Rev. X Quantum，Phys. Rev. E，Phys. Rev. A，Phys. Rev. Res，Physica A，Sci. Rep，Classical Quant. Grav.，Ann. Phys. (Berlin)，Front. Phys.，Entropy，Commun. Theor. Phys.，Chinese Phys. B，Am. J. Phys. 等国际刊物的审稿人
-
 2. 参与北京师范大学《京师物理》微信公众号 PRLTI 项目，担任 PRL 文章导读译者、Phys. Rev.系列五十周年里程碑文章导读负责人、译者
-
 3. 2018-2019 年，参与科普书籍《公式之美》修改、校订工作。本书已于 2020 年十月出版
-
 4. 担任中国大学生物理学术竞赛（CUPT）评委、全国中学生物理学术竞赛 CYPT 评委（2024）、北师大物理学术竞赛 BNUPT 评委（2014-2023）、北京市高中生物理研究性学习活动 BJYPT 评委(2014-2019)
-
 5. 第 15 届中国大学生物理学术竞赛（CUPT）竞赛委员会委员，2024
-
 6. 负责《少年时》杂志《十节物理课》中“蒸汽机与热力学定律”一章的撰写工作
