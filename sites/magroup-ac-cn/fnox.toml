@@ -1,0 +1,9 @@
+#:schema https://fnox.jdx.dev/schema.json
+
+[providers.rbw]
+type = 'bitwarden'
+backend = "rbw"
+auth_command = "rbw unlock"
+
+[secrets]
+BUCKET = { provider = "rbw", value = "magroup.ac.cn-bucket", env = true }

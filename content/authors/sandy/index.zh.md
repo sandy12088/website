@@ -1,6 +1,6 @@
 ---
 title: 陈苗
-role: 研究生
+role: 硕士研究生
 organizations:
   - name: 北京师范大学物理与天文学院
     url: https://physics.bnu.edu.cn/

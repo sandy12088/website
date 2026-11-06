@@ -1,4 +1,7 @@
+#:schema https://mise.jdx.dev/schema.json
+
 [tools]
+fnox = { version = "latest", workflow = "release.yml" }
 hk = "latest"
 jactionlint = "latest"
 node = "26.11.1"
